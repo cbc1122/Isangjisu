@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이상지수연구소 — 세상의 온도계</title>
+<meta name="description" content="VIX, 헴라인 지수, 빅맥 지수 등 세상에서 가장 이상하고 솔직한 경제 지수 40개 모음. 실시간 데이터 연동.">
+<meta name="keywords" content="VIX, 공포지수, 빅맥지수, 코스피, 나스닥, 경기지수, 헴라인, 발틱운임지수, 투자, 경제지표">
+<meta name="author" content="이상지수연구소">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="이상지수연구소 — 세상의 온도계">
+<meta property="og:description" content="피자 주문량으로 전쟁을 예측하고, 속옷 판매량으로 경기를 읽고, 하이힐 굽 높이로 불황을 감지하는 — 세상에서 가장 이상하고 솔직한 지수 40개 아카이브.">
+<meta property="og:url" content="https://www.isangjisu.com/">
+<meta property="og:site_name" content="이상지수연구소">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="이상지수연구소 — 세상의 온도계">
+<meta name="twitter:description" content="피자 주문량으로 전쟁을 예측하고, 속옷 판매량으로 경기를 읽는 지수들의 아카이브. 40개 경제 지수 실시간 연동.">
+<link rel="canonical" href="https://www.isangjisu.com/">
+<meta property="og:image" content="https://www.isangjisu.com/og-image.jpg">
+<meta property="og:image:alt" content="이상지수연구소 — 세상의 온도계 썸네일">
+<meta name="twitter:image" content="https://www.isangjisu.com/og-image.jpg">
+<meta name="twitter:image:alt" content="이상지수연구소 — 세상의 온도계 썸네일">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#06060a;--bg2:#0c0c12;--bg3:#11111a;--bg4:#161622;
+  --border:#1c1c2e;--border2:#262638;
+  --gold:#e8a000;--gold-dim:#7a4e00;
+  --green:#00e87a;--red:#ff3355;
+  --blue:#3d9be9;--purple:#9f7aea;--orange:#f97316;
+  --teal:#00c9a7;
+  --text:#b8b8cc;--text-dim:#44445a;--text-mid:#7878a0;--text-bright:#eeeef8;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Noto Sans KR',sans-serif;
+  --display:'Syne',sans-serif;
+  --ticker-h:30px;--header-h:62px;--filter-h:48px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9998;opacity:0.45}
+body::before{content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.055) 2px,rgba(0,0,0,0.055) 4px);
+  pointer-events:none;z-index:9997}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* ── TICKER TAPE ── */
+.ticker-outer{
+  position:sticky;top:0;z-index:600;height:var(--ticker-h);
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;overflow:hidden;
+}
+.ticker-label{
+  flex-shrink:0;padding:0 14px;height:100%;
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:0.55rem;letter-spacing:0.2em;
+  color:var(--green);border-right:1px solid var(--border);
+  background:rgba(0,232,122,0.05);white-space:nowrap;
+}
+.tk-dot{width:5px;height:5px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 6px rgba(0,232,122,0.7);animation:pulse 2s infinite;flex-shrink:0}
+.ticker-track-wrap{flex:1;overflow:hidden;position:relative}
+.ticker-track-wrap::before{content:'';position:absolute;left:0;top:0;bottom:0;width:30px;
+  background:linear-gradient(90deg,var(--bg3),transparent);z-index:2;pointer-events:none}
+.ticker-track-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:30px;
+  background:linear-gradient(270deg,var(--bg3),transparent);z-index:2;pointer-events:none}
+.ticker-track{
+  display:inline-flex;align-items:center;gap:0;
+  white-space:nowrap;padding-left:20px;
+  animation:tickerScroll 60s linear infinite;
+}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tk-item{
+  font-family:var(--mono);font-size:0.62rem;color:var(--text-mid);
+  padding:0 18px;display:inline-flex;align-items:center;gap:7px;
+  border-right:1px solid var(--border);
+}
+.tk-name{letter-spacing:0.08em}
+.tk-val{font-weight:600;color:var(--text-bright)}
+.tk-chg{font-size:0.55rem}
+.tk-chg.up{color:var(--green)}
+.tk-chg.dn{color:var(--red)}
+.tk-loading{color:var(--text-dim);animation:blink 1.4s infinite}
+
+/* ── HEADER ── */
+header{
+  position:sticky;top:var(--ticker-h);z-index:500;
+  backdrop-filter:blur(20px);
+  background:linear-gradient(180deg,rgba(6,6,10,0.97),rgba(6,6,10,0.85));
+  border-bottom:1px solid var(--border);
+  padding:0 40px;height:var(--header-h);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo-wrap{display:flex;align-items:baseline;gap:14px}
+.logo{font-family:var(--display);font-size:1.3rem;font-weight:800;letter-spacing:0.18em;
+  color:var(--gold);text-shadow:0 0 22px rgba(232,160,0,0.3);text-transform:uppercase}
+.logo-sub{font-family:var(--mono);font-size:0.58rem;color:var(--text-dim);letter-spacing:0.2em}
+.header-right{display:flex;align-items:center;gap:16px}
+.live-pill{display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:0.6rem;color:var(--green);letter-spacing:0.15em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px rgba(0,232,122,0.7);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.7)}}
+.header-count{font-family:var(--mono);font-size:0.62rem;color:var(--text-dim)}
+.header-count strong{color:var(--gold)}
+.refresh-wrap{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:0.55rem;color:var(--text-dim);
+  letter-spacing:0.08em;cursor:pointer;padding:4px 8px;
+  border:1px solid var(--border);border-radius:4px;
+  transition:all 0.15s;
+}
+.refresh-wrap:hover{border-color:var(--border2);color:var(--text)}
+.refresh-ring{
+  width:12px;height:12px;border-radius:50%;
+  border:1.5px solid var(--border2);border-top-color:var(--green);
+}
+.refresh-ring.spinning{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── API STATUS BAR ── */
+.api-bar{
+  background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:10px 40px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.api-item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.62rem;color:var(--text-dim)}
+.api-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.api-dot.live{background:var(--green);box-shadow:0 0 6px rgba(0,232,122,0.6)}
+.api-dot.link{background:var(--blue);box-shadow:0 0 6px rgba(61,155,233,0.5)}
+.api-dot.loading{background:var(--gold);animation:pulse 1.5s infinite}
+.api-label{color:var(--text-mid)}
+.api-val{color:var(--text-bright);font-weight:500}
+.api-sep{color:var(--border2);margin:0 4px}
+
+/* ── AD BANNERS ── */
+.ad-wrap{padding:14px 40px;display:flex;justify-content:center;background:var(--bg)}
+.ad-banner{
+  width:100%;max-width:728px;height:90px;
+  background:var(--bg3);border:1px dashed var(--border2);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;gap:12px;position:relative;
+}
+.ad-label-tag{
+  position:absolute;top:6px;left:8px;
+  font-family:var(--mono);font-size:0.45rem;letter-spacing:0.2em;
+  color:var(--text-dim);background:var(--bg4);
+  padding:2px 5px;border:1px solid var(--border);border-radius:2px;
+}
+.ad-placeholder{font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.05em}
+.ad-wrap.ad-mid .ad-banner{max-width:970px;background:linear-gradient(135deg,var(--bg3),var(--bg2))}
+
+/* ── HERO ── */
+.hero{padding:60px 40px 0;max-width:860px;margin:0 auto;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:640px;height:320px;
+  background:radial-gradient(ellipse,rgba(232,160,0,0.07) 0%,transparent 68%);pointer-events:none}
+.hero-eyebrow{font-family:var(--mono);font-size:0.63rem;letter-spacing:0.3em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:18px;
+  display:flex;align-items:center;justify-content:center;gap:10px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:32px;height:1px}
+.hero-eyebrow::before{background:linear-gradient(90deg,transparent,var(--gold-dim))}
+.hero-eyebrow::after{background:linear-gradient(90deg,var(--gold-dim),transparent)}
+.hero-title{font-family:var(--display);font-size:clamp(2.2rem,5vw,3.8rem);
+  font-weight:800;line-height:1.08;color:var(--text-bright);letter-spacing:-0.02em;margin-bottom:18px}
+.hero-title em{font-style:normal;color:var(--gold)}
+.hero-desc{font-size:0.92rem;line-height:1.75;color:var(--text-mid);max-width:600px;margin:0 auto}
+
+/* ── TEMPERATURE GAUGE ── */
+.gauge-section{
+  margin:36px auto 0;max-width:700px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:22px 28px;
+}
+.gauge-header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
+}
+.gauge-title{
+  font-family:var(--mono);font-size:0.58rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--text-dim);
+  display:flex;align-items:center;gap:8px;
+}
+.gauge-score-label{
+  font-family:var(--mono);font-size:0.62rem;
+  color:var(--text-dim);letter-spacing:0.05em;
+}
+.gauge-score-label strong{font-size:1.3rem;color:var(--text-bright);font-weight:700}
+.gauge-score-label span{font-size:0.58rem;color:var(--text-dim)}
+.gauge-bar-track{
+  height:16px;border-radius:8px;position:relative;overflow:visible;
+  background:linear-gradient(90deg,
+    #ff2244 0%,#ff5500 20%,#ff9900 40%,
+    #e8a000 50%,#88cc00 65%,#00dd66 80%,#00e87a 100%);
+  margin-bottom:18px;
+}
+.gauge-pointer{
+  position:absolute;top:-10px;width:3px;height:36px;
+  background:white;border-radius:2px;
+  box-shadow:0 0 10px rgba(255,255,255,0.5);
+  transition:left 1.5s cubic-bezier(0.34,1.56,0.64,1);
+  transform:translateX(-50%);
+}
+.gauge-pointer-tip{
+  position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:0.6rem;font-weight:700;
+  color:white;white-space:nowrap;
+  background:var(--bg4);border:1px solid var(--border2);
+  padding:2px 7px;border-radius:3px;
+}
+.gauge-labels{
+  display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:0.52rem;color:var(--text-dim);letter-spacing:0.04em;
+}
+.gauge-label-item{display:flex;flex-direction:column;align-items:center;gap:2px}
+.gauge-label-dot{width:3px;height:3px;border-radius:50%;background:var(--border2)}
+.gauge-status{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--border);
+}
+.gauge-status-txt{
+  font-family:var(--mono);font-size:0.62rem;color:var(--text-mid);letter-spacing:0.05em;
+}
+.gauge-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ── DAILY POLL ── */
+.poll-section{
+  margin:14px auto 0;max-width:700px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:20px 28px 22px;
+}
+.poll-head{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;
+}
+.poll-q{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.05em;color:var(--text)}
+.poll-q strong{color:var(--text-bright)}
+.poll-date{font-family:var(--mono);font-size:0.5rem;color:var(--text-dim);letter-spacing:0.1em}
+.poll-btns{display:flex;gap:8px;margin-bottom:14px}
+.poll-btn{
+  flex:1;padding:10px 10px;cursor:pointer;
+  background:var(--bg4);border:1px solid var(--border2);border-radius:4px;
+  font-family:var(--mono);font-size:0.65rem;letter-spacing:0.05em;
+  color:var(--text-mid);transition:all 0.15s;
+}
+.poll-btn:hover{border-color:var(--gold-dim);color:var(--gold)}
+.poll-btn.voted-up{border-color:var(--green);color:var(--green);background:rgba(0,232,122,0.07)}
+.poll-btn.voted-dn{border-color:var(--red);color:var(--red);background:rgba(255,51,85,0.07)}
+.poll-btn.voted-flat{border-color:var(--gold);color:var(--gold);background:rgba(232,160,0,0.07)}
+.poll-results{display:flex;flex-direction:column;gap:7px}
+.poll-row{display:flex;align-items:center;gap:8px}
+.poll-row-label{font-family:var(--mono);font-size:0.55rem;color:var(--text-dim);width:38px}
+.poll-bar-bg{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.poll-bar-fill{height:100%;border-radius:3px;transition:width 0.9s ease}
+.poll-bar-fill.up{background:var(--green)}
+.poll-bar-fill.dn{background:var(--red)}
+.poll-bar-fill.flat{background:var(--gold)}
+.poll-pct{font-family:var(--mono);font-size:0.55rem;color:var(--text-mid);width:38px;text-align:right}
+.poll-total-note{font-family:var(--mono);font-size:0.5rem;color:var(--text-dim);text-align:center;margin-top:10px}
+
+/* ── FEATURED CARD ── */
+.featured-section{
+  margin-bottom:36px;
+  background:linear-gradient(135deg,rgba(232,160,0,0.06) 0%,rgba(61,155,233,0.03) 100%);
+  border:1px solid rgba(232,160,0,0.2);border-radius:8px;
+  padding:22px 26px;display:flex;align-items:flex-start;gap:18px;
+  cursor:pointer;transition:border-color 0.2s;
+}
+.featured-section:hover{border-color:rgba(232,160,0,0.4)}
+.featured-emoji{font-size:2.6rem;line-height:1;flex-shrink:0;margin-top:2px}
+.featured-body{flex:1}
+.featured-meta{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.featured-tag{
+  font-family:var(--mono);font-size:0.5rem;letter-spacing:0.2em;
+  color:var(--gold);background:rgba(232,160,0,0.1);
+  border:1px solid rgba(232,160,0,0.25);border-radius:3px;
+  padding:3px 8px;text-transform:uppercase;
+}
+.featured-date{font-family:var(--mono);font-size:0.5rem;color:var(--text-dim);letter-spacing:0.1em}
+.featured-name{font-family:var(--display);font-size:1.2rem;font-weight:700;
+  color:var(--text-bright);margin-bottom:6px;line-height:1.2}
+.featured-tagline{font-size:0.78rem;color:var(--text-mid);line-height:1.6}
+.featured-hint{
+  font-family:var(--mono);font-size:0.55rem;color:var(--text-dim);
+  margin-top:12px;letter-spacing:0.08em;
+  display:flex;align-items:center;gap:6px;
+}
+.featured-arrow{color:var(--gold);font-size:0.7rem}
+
+/* ── FILTER BAR ── */
+.filter-wrap{
+  position:sticky;top:calc(var(--ticker-h) + var(--header-h));z-index:400;
+  background:rgba(6,6,10,0.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);padding:10px 40px;
+}
+.filter-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search-box{position:relative;flex:1;min-width:180px}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  font-size:0.7rem;color:var(--text-dim)}
+.search-box input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:4px;
+  padding:8px 12px 8px 30px;font-family:var(--mono);font-size:0.72rem;
+  color:var(--text-bright);letter-spacing:0.03em;outline:none;transition:border-color 0.2s;
+}
+.search-box input:focus{border-color:var(--gold-dim)}
+.search-box input::placeholder{color:var(--text-dim)}
+.cat-btn{
+  background:var(--bg3);border:1px solid var(--border);border-radius:4px;
+  padding:7px 12px;font-family:var(--mono);font-size:0.61rem;color:var(--text-mid);
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap;
+}
+.cat-btn:hover{border-color:var(--border2);color:var(--text)}
+.cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,160,0,0.07)}
+.cat-btn.fav-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,160,0,0.1)}
+.filter-count{font-family:var(--mono);font-size:0.58rem;color:var(--text-dim);
+  letter-spacing:0.1em;margin-left:auto;white-space:nowrap}
+
+/* ── MAIN ── */
+main{max-width:1320px;margin:0 auto;padding:36px 40px 60px}
+
+/* ── SECTION ── */
+.section{margin-bottom:52px}
+.section-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;
+  padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-icon{font-size:1.2rem}
+.section-title{font-family:var(--display);font-size:1.05rem;font-weight:700;
+  letter-spacing:0.07em;color:var(--text-bright);text-transform:uppercase}
+.section-count{font-family:var(--mono);font-size:0.58rem;color:var(--text-dim);
+  letter-spacing:0.15em;margin-left:auto}
+
+/* ── GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px}
+
+/* ── CARD ── */
+.card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  overflow:hidden;transition:transform 0.18s,border-color 0.18s,box-shadow 0.18s;
+  animation:fadeUp 0.4s ease both;display:flex;flex-direction:column;
+  position:relative;
+}
+.card:hover{transform:translateY(-2px);border-color:var(--border2);
+  box-shadow:0 8px 32px rgba(0,0,0,0.45),0 0 0 1px rgba(232,160,0,0.04)}
+.card.bookmarked{border-color:rgba(232,160,0,0.3)}
+
+/* ── BOOKMARK BUTTON ── */
+.card-bm-btn{
+  position:absolute;top:10px;right:10px;z-index:10;
+  background:none;border:none;cursor:pointer;
+  font-size:0.85rem;color:var(--text-dim);
+  padding:4px 6px;border-radius:4px;
+  transition:all 0.15s;line-height:1;
+}
+.card-bm-btn:hover{color:var(--gold);transform:scale(1.2)}
+.card-bm-btn.on{color:var(--gold)}
+
+/* ── LIVE STRIP ── */
+.live-strip{
+  padding:10px 20px;
+  background:linear-gradient(135deg,rgba(0,232,122,0.05),rgba(0,232,122,0.02));
+  border-bottom:1px solid rgba(0,232,122,0.12);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.live-strip.stock{
+  background:linear-gradient(135deg,rgba(0,201,167,0.05),rgba(0,201,167,0.02));
+  border-bottom-color:rgba(0,201,167,0.12);
+}
+.ls-label{font-family:var(--mono);font-size:0.58rem;color:rgba(0,232,122,0.6);
+  letter-spacing:0.2em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.live-strip.stock .ls-label{color:rgba(0,201,167,0.7)}
+.ls-val{font-family:var(--mono);font-size:1.4rem;font-weight:700;
+  color:var(--text-bright);letter-spacing:-0.02em}
+.ls-change{font-family:var(--mono);font-size:0.72rem;font-weight:500}
+.ls-change.up{color:var(--green)}
+.ls-change.dn{color:var(--red)}
+.ls-loading{font-family:var(--mono);font-size:0.65rem;color:var(--text-dim);
+  letter-spacing:0.1em;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ── CARD TOP ── */
+.card-top{padding:20px 20px 15px;border-bottom:1px solid var(--border)}
+.card-meta-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.card-emoji{font-size:1.9rem;line-height:1}
+.card-badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;
+  text-transform:uppercase;padding:3px 8px;border-radius:3px;border:1px solid}
+.badge-fear{color:var(--purple);border-color:rgba(159,122,234,0.25);background:rgba(159,122,234,0.06)}
+.badge-leading{color:var(--blue);border-color:rgba(61,155,233,0.25);background:rgba(61,155,233,0.06)}
+.badge-alt{color:var(--orange);border-color:rgba(249,115,22,0.25);background:rgba(249,115,22,0.06)}
+.badge-live{color:var(--green);border-color:rgba(0,232,122,0.3);background:rgba(0,232,122,0.07)}
+.badge-link{color:var(--blue);border-color:rgba(61,155,233,0.3);background:rgba(61,155,233,0.07)}
+.badge-major{color:var(--teal);border-color:rgba(0,201,167,0.3);background:rgba(0,201,167,0.06)}
+.card-name{font-family:var(--display);font-size:1.12rem;font-weight:700;
+  color:var(--text-bright);letter-spacing:-0.01em;line-height:1.2;margin-bottom:3px}
+.card-name-en{font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);
+  letter-spacing:0.06em;margin-bottom:9px}
+.card-tagline{font-size:0.77rem;color:var(--text-mid);line-height:1.55;
+  padding-top:9px;border-top:1px solid var(--border)}
+
+/* ── CARD BODY ── */
+.card-body{padding:17px 20px 0;flex:1}
+.story-label{font-family:var(--mono);font-size:0.56rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.story-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold-dim),transparent)}
+.story{font-size:0.76rem;line-height:1.75;color:var(--text)}
+.story strong{color:var(--text-bright);font-weight:600}
+.story em{font-style:normal;color:var(--gold)}
+
+/* ── KEY FACTS ── */
+.key-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+  margin:14px 0;padding:13px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.fact{display:flex;flex-direction:column;gap:2px}
+.fact-label{font-family:var(--mono);font-size:0.55rem;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase}
+.fact-value{font-family:var(--mono);font-size:0.73rem;color:var(--text-bright);font-weight:500}
+
+/* ── CARD FOOTER ── */
+.card-footer{padding:13px 20px 17px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:auto}
+.btn-view-live{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;
+  padding:9px 16px;border-radius:4px;border:1px solid rgba(61,155,233,0.4);
+  color:#6bb8f5;background:rgba(61,155,233,0.07);text-decoration:none;
+  transition:all 0.15s;font-weight:500;
+}
+.btn-view-live:hover{border-color:rgba(61,155,233,0.8);background:rgba(61,155,233,0.14);color:#a0d4ff}
+.btn-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:0.62rem;letter-spacing:0.06em;
+  padding:7px 12px;border-radius:3px;border:1px solid var(--border2);
+  color:var(--text-mid);background:var(--bg3);text-decoration:none;transition:all 0.15s;
+}
+.btn-link:hover{border-color:var(--border2);color:var(--text);background:var(--bg4)}
+.link-arrow{font-size:0.65rem;opacity:0.6}
+.btn-share{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:0.62rem;letter-spacing:0.06em;
+  padding:7px 12px;border-radius:3px;border:1px solid var(--border2);
+  color:var(--text-dim);background:var(--bg3);
+  cursor:pointer;transition:all 0.15s;margin-left:auto;
+}
+.btn-share:hover{border-color:var(--gold-dim);color:var(--gold);background:var(--bg4)}
+
+/* ── NO RESULTS ── */
+.no-results{grid-column:1/-1;text-align:center;padding:60px 20px;
+  font-family:var(--mono);font-size:0.72rem;color:var(--text-dim);letter-spacing:0.1em}
+.no-results-icon{font-size:2rem;margin-bottom:12px}
+
+/* ── TOAST NOTIFICATION ── */
+.toast{
+  position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:var(--bg4);border:1px solid var(--border2);border-radius:6px;
+  padding:12px 20px;font-family:var(--mono);font-size:0.65rem;
+  color:var(--text-bright);letter-spacing:0.05em;
+  transform:translateY(80px);opacity:0;
+  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  display:flex;align-items:center;gap:10px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:26px 40px;
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.footer-left{font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);line-height:1.8}
+.footer-right{font-family:var(--mono);font-size:0.56rem;color:#22223a;line-height:1.7;max-width:400px;text-align:right}
+
+/* ── SECTION AD INSERT ── */
+.section-ad{
+  margin:0 0 52px;
+  display:flex;justify-content:center;
+}
+.section-ad .ad-banner{max-width:970px;border-style:dashed}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}
+.card:nth-child(3){animation-delay:.12s}.card:nth-child(4){animation-delay:.16s}
+.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
+.card:nth-child(7){animation-delay:.28s}.card:nth-child(8){animation-delay:.32s}
+.card:nth-child(9){animation-delay:.36s}.card:nth-child(10){animation-delay:.40s}
+
+/* ── EMPTY BOOKMARKS ── */
+.empty-bookmarks{
+  text-align:center;padding:60px 20px;
+  font-family:var(--mono);font-size:0.72rem;color:var(--text-dim);
+}
+.empty-bookmarks-icon{font-size:2.4rem;margin-bottom:12px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  header,.filter-wrap,main,.api-bar,.hero,footer,.ad-wrap,.gauge-section,.poll-section{
+    padding-left:18px;padding-right:18px;
+  }
+  .cards-grid{grid-template-columns:1fr}
+  .hero-title{font-size:2rem}
+  .hero{padding:44px 18px 0}
+  .featured-section{flex-direction:column;gap:12px}
+  .gauge-section,.poll-section{max-width:100%;margin-left:18px;margin-right:18px}
+}
+</style>
+
+<!-- Google Analytics 4 (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3MJ7M0HCT6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3MJ7M0HCT6');
+</script>
+
+</head>
+<body>
+
+<!-- TICKER TAPE -->
+<div class="ticker-outer">
+  <div class="ticker-label">
+    <div class="tk-dot"></div>
+    LIVE
+  </div>
+  <div class="ticker-track-wrap">
+    <div class="ticker-track" id="tickerTrack">
+      <!-- populated by JS, duplicated for seamless loop -->
+    </div>
+  </div>
+</div>
+
+<!-- AD BANNER TOP -->
+<div class="ad-wrap">
+  <div class="ad-banner">
+    <span class="ad-label-tag">광고</span>
+    <span class="ad-placeholder">728 × 90 — Leaderboard 광고 배너 슬롯 (Google AdSense / 자체 광고)</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo">이상지수연구소</div>
+    <div class="logo-sub">// 세상의 온도계</div>
+  </div>
+  <div class="header-right">
+    <div class="live-pill"><div class="live-dot"></div>LIVE</div>
+    <div class="header-count">총 <strong id="totalCount">0</strong>개 · 표시 <strong id="shownCount">0</strong>개</div>
+    <div class="refresh-wrap" id="refreshWrap" title="지금 새로고침">
+      <div class="refresh-ring" id="refreshRing"></div>
+      <span id="refreshCountdown">60s</span>
+    </div>
+  </div>
+</header>
+
+<!-- API STATUS BAR -->
+<div class="api-bar" id="apiBar">
+  <div class="api-item">
+    <div class="api-dot loading" id="dot-cfg"></div>
+    <span class="api-label">크립토 F&G</span>
+    <span class="api-sep">|</span>
+    <span class="api-val" id="val-cfg">로딩 중…</span>
+  </div>
+  <div class="api-item">
+    <div class="api-dot loading" id="dot-btc"></div>
+    <span class="api-label">BTC</span>
+    <span class="api-sep">|</span>
+    <span class="api-val" id="val-btc">로딩 중…</span>
+  </div>
+  <div class="api-item">
+    <div class="api-dot loading" id="dot-eth"></div>
+    <span class="api-label">ETH</span>
+    <span class="api-sep">|</span>
+    <span class="api-val" id="val-eth">로딩 중…</span>
+  </div>
+  <div class="api-item">
+    <div class="api-dot loading" id="dot-stocks"></div>
+    <span class="api-label">주요 지수</span>
+    <span class="api-sep">|</span>
+    <span class="api-val" id="val-stocks">로딩 중…</span>
+  </div>
+  <div class="api-item" style="margin-left:auto">
+    <div class="api-dot link"></div>
+    <span class="api-label" style="color:var(--text-dim)">나머지는 카드의 </span>
+    <span style="color:var(--blue);font-family:var(--mono);font-size:0.62rem">📊 지금 확인하기</span>
+    <span class="api-label"> 버튼으로 연결</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">The Market is Watching</div>
+  <h1 class="hero-title">시장이 숨기고 싶은<br><em>지수들</em></h1>
+  <p class="hero-desc">
+    나스닥과 코스피는 누구나 안다. 여기는 다르다. 피자 주문량으로 전쟁을 예측하고,
+    남성 속옷 판매량으로 경기를 읽고, 하이힐 굽 높이로 불황을 감지하는 — 세상에서
+    가장 이상하고, 가장 솔직한 지수들의 아카이브.
+  </p>
+
+  <!-- MARKET TEMPERATURE GAUGE -->
+  <div class="gauge-section">
+    <div class="gauge-header">
+      <div class="gauge-title">
+        🌡️ &nbsp;세계 시장 온도계
+        <span style="color:var(--text-dim);font-size:0.5rem">(크립토 F&G 기반 · 실시간)</span>
+      </div>
+      <div class="gauge-score-label">
+        <strong id="gaugeScore">—</strong>
+        <span id="gaugeScoreLabel"> / 100</span>
+      </div>
+    </div>
+    <div class="gauge-bar-track">
+      <div class="gauge-pointer" id="gaugePointer" style="left:50%">
+        <div class="gauge-pointer-tip" id="gaugePointerTip">—</div>
+      </div>
+    </div>
+    <div class="gauge-labels">
+      <div class="gauge-label-item"><div class="gauge-label-dot"></div>극도 공포</div>
+      <div class="gauge-label-item"><div class="gauge-label-dot"></div>공포</div>
+      <div class="gauge-label-item"><div class="gauge-label-dot"></div>중립</div>
+      <div class="gauge-label-item"><div class="gauge-label-dot"></div>탐욕</div>
+      <div class="gauge-label-item"><div class="gauge-label-dot"></div>극도 탐욕</div>
+    </div>
+    <div class="gauge-status">
+      <div class="gauge-status-dot" id="gaugeStatusDot" style="background:var(--text-dim)"></div>
+      <div class="gauge-status-txt" id="gaugeStatusTxt">데이터 로딩 중…</div>
+    </div>
+  </div>
+
+  <!-- DAILY POLL -->
+  <div class="poll-section">
+    <div class="poll-head">
+      <div class="poll-q"><strong>오늘 글로벌 시장이 오를까, 내릴까?</strong></div>
+      <div class="poll-date" id="pollDate"></div>
+    </div>
+    <div class="poll-btns" id="pollBtns">
+      <button class="poll-btn" id="pollUp" onclick="castVote('up')">▲ 상승</button>
+      <button class="poll-btn" id="pollFlat" onclick="castVote('flat')">→ 횡보</button>
+      <button class="poll-btn" id="pollDn" onclick="castVote('dn')">▼ 하락</button>
+    </div>
+    <div class="poll-results">
+      <div class="poll-row">
+        <span class="poll-row-label">상승</span>
+        <div class="poll-bar-bg"><div class="poll-bar-fill up" id="barUp" style="width:0%"></div></div>
+        <span class="poll-pct" id="pctUp">—</span>
+      </div>
+      <div class="poll-row">
+        <span class="poll-row-label">횡보</span>
+        <div class="poll-bar-bg"><div class="poll-bar-fill flat" id="barFlat" style="width:0%"></div></div>
+        <span class="poll-pct" id="pctFlat">—</span>
+      </div>
+      <div class="poll-row">
+        <span class="poll-row-label">하락</span>
+        <div class="poll-bar-bg"><div class="poll-bar-fill dn" id="barDn" style="width:0%"></div></div>
+        <span class="poll-pct" id="pctDn">—</span>
+      </div>
+    </div>
+    <div class="poll-total-note" id="pollTotalNote">투표에 참여해보세요 👆</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-wrap">
+  <div class="filter-inner">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="검색: VIX, NASDAQ, 피자, 빅맥…" autocomplete="off" spellcheck="false">
+    </div>
+    <button class="cat-btn active" data-cat="all">전체</button>
+    <button class="cat-btn" data-cat="글로벌 지수">📈 글로벌 지수</button>
+    <button class="cat-btn" data-cat="심리·공포">🧠 심리·공포</button>
+    <button class="cat-btn" data-cat="경기 선행">📡 경기 선행</button>
+    <button class="cat-btn" data-cat="도시전설">🍕 도시전설</button>
+    <button class="cat-btn" data-cat="마이너 지수">🔬 마이너 지수</button>
+    <button class="cat-btn fav-btn" data-cat="favorites" id="btnFavs">⭐ 즐겨찾기</button>
+    <span class="filter-count" id="filterCount"></span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <!-- FEATURED CARD (오늘의 추천 지수) -->
+  <div id="featuredSection"></div>
+
+  <!-- CARD CONTAINER -->
+  <div id="cardContainer"></div>
+
+  <!-- AD BANNER BOTTOM -->
+  <div class="section-ad" style="margin-top:20px">
+    <div class="ad-banner">
+      <span class="ad-label-tag">광고</span>
+      <span class="ad-placeholder">728 × 90 — Bottom 광고 배너 슬롯</span>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    이상지수연구소 © 2025<br>
+    🟢 실시간 = alternative.me · CoinGecko · Yahoo Finance (allorigins proxy)<br>
+    🔵 링크 = 각 공식 발표 기관 원본 페이지로 직접 연결
+  </div>
+  <div class="footer-right">
+    ⚠ 이 페이지의 내용은 투자 조언이 아닙니다.<br>
+    펜타곤 피자지수를 믿고 행동한 결과에 대한<br>
+    책임은 본인에게 있습니다. 진심으로.
+  </div>
+</footer>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<!-- DATA -->
+<script>
+const DATA = [
+
+  /* ─── 글로벌 지수 ─── */
+  {
+    id:'sp500', cat:'글로벌 지수', emoji:'🦅',
+    name:'S&P 500', nameEn:'Standard & Poors 500',
+    badge:'badge-major', badgeText:'미국 대형주',
+    liveKey:'sp500', stockSym:'^GSPC',
+    viewUrl:'https://finance.yahoo.com/quote/%5EGSPC/',
+    viewLabel:'S&P 500 실시간',
+    tagline:'미국 상위 500대 기업의 시가총액 가중 지수. "미국 경제에 투자한다"는 말의 실체.',
+    story:`<strong>1957년 S&P(Standard & Poors)가 창설</strong>. 뉴욕증권거래소(NYSE)와 NASDAQ에 상장된 500개 대형주를 시가총액 비중으로 합산한다.<br><br>
+세계 기관투자자들의 기준 벤치마크로, 전 세계 ETF 시장의 상당 부분이 이 지수를 추종한다. <em>버크셔 해서웨이, 뱅가드, 블랙록의 인덱스 펀드들이 S&P 500을 매수한다는 것은 사실상 미국 경제 자체를 소유하는 것이다.</em><br><br>
+<strong>역사적 연평균 수익률:</strong> 배당 포함 약 +10% (1926년 이후). 어떤 예측가보다 꾸준히 좋은 성과를 냈기에 "시장을 이기려 하지 말고 지수를 따르라"는 패시브 투자 철학의 근거가 됐다.`,
+    facts:[
+      {label:'구성 종목', value:'500개 (대형주)'},
+      {label:'갱신 주기', value:'장중 실시간'},
+      {label:'역사적 연평균', value:'약 +10% (배당 포함)'},
+      {label:'시작 연도', value:'1957년'},
+    ],
+    links:[
+      {label:'TradingView S&P 500', url:'https://www.tradingview.com/symbols/SP-500/'},
+      {label:'Investopedia 해설', url:'https://www.investopedia.com/terms/s/sp500.asp'},
+    ]
+  },
+
+  {
+    id:'nasdaq', cat:'글로벌 지수', emoji:'💻',
+    name:'나스닥 종합 지수', nameEn:'NASDAQ Composite',
+    badge:'badge-major', badgeText:'미국 기술주',
+    liveKey:'nasdaq', stockSym:'^IXIC',
+    viewUrl:'https://finance.yahoo.com/quote/%5EIXIC/',
+    viewLabel:'나스닥 실시간',
+    tagline:'애플·마이크로소프트·구글·아마존·테슬라·엔비디아. 기술 혁명의 체온.',
+    story:`<strong>1971년 설립</strong>된 나스닥 거래소의 모든 상장 종목(약 3,300개)을 포괄하는 지수. 기술주 비중이 압도적으로 높아 "기술 혁명의 체온계"로 불린다.<br><br>
+2000년 닷컴 버블 당시 <em>5,048까지 치솟았다가 78% 폭락</em>, 2003년 저점에서 회복까지 15년이 걸렸다. 그러나 이후 AI·클라우드 시대를 맞아 20,000을 돌파했다.<br><br>
+나스닥100(QQQ ETF)은 상위 100개 비금융 기업만 추려 더 강한 기술주 집중도를 보인다. <strong>나스닥 급락 = 기술주 매도 공포</strong>의 신호로 자주 해석된다.`,
+    facts:[
+      {label:'구성 종목', value:'약 3,300개'},
+      {label:'갱신 주기', value:'장중 실시간'},
+      {label:'기술주 비중', value:'약 50%+'},
+      {label:'역대 최고', value:'20,000+ (2024)'},
+    ],
+    links:[
+      {label:'TradingView NASDAQ', url:'https://www.tradingview.com/symbols/NASDAQ-IXIC/'},
+    ]
+  },
+
+  {
+    id:'russell', cat:'글로벌 지수', emoji:'🏭',
+    name:'러셀 2000', nameEn:'Russell 2000 Index',
+    badge:'badge-major', badgeText:'미국 중소형주',
+    liveKey:'russell', stockSym:'^RUT',
+    viewUrl:'https://finance.yahoo.com/quote/%5ERUT/',
+    viewLabel:'러셀 2000 실시간',
+    tagline:'빅테크 없이 미국 경제의 "진짜 내부"를 보고 싶다면. 중소형주 2,000개의 체온.',
+    story:`<strong>FTSE Russell이 산출</strong>하는 미국 소형주 벤치마크. 시가총액 기준 미국 주식 3,001~5,000위 기업 약 2,000개를 포괄한다.<br><br>
+S&P 500이 애플·마이크로소프트 같은 거대 기업 위주라면, 러셀 2000은 <em>전국에 퍼진 미국의 중소 제조업·서비스·리테일</em>을 대표한다. 그래서 미국 내수 경기에 더 민감하게 반응한다.<br><br>
+<strong>러셀 2000 상승 > S&P 500 상승:</strong> 위험 선호, 내수 경기 회복 신호.<br>
+<strong>러셀 2000 하락 > S&P 500 하락:</strong> 달러 강세, 유동성 위기 우려 선호 신호로 해석하는 경우가 많다.`,
+    facts:[
+      {label:'구성 종목', value:'약 2,000개 소형주'},
+      {label:'갱신 주기', value:'장중 실시간'},
+      {label:'의미', value:'미국 내수 경기 바로미터'},
+      {label:'ETF 추종', value:'IWM (가장 유명한 추종 ETF)'},
+    ],
+    links:[
+      {label:'TradingView RUT', url:'https://www.tradingview.com/symbols/TVC-RUT/'},
+    ]
+  },
+
+  {
+    id:'kospi', cat:'글로벌 지수', emoji:'🇰🇷',
+    name:'코스피 (KOSPI)', nameEn:'Korea Composite Stock Price Index',
+    badge:'badge-major', badgeText:'한국 종합',
+    liveKey:'kospi', stockSym:'^KS11',
+    viewUrl:'https://finance.yahoo.com/quote/%5EKS11/',
+    viewLabel:'코스피 실시간',
+    tagline:'삼성전자·SK하이닉스·현대차. 한국 경제의 심전도. 반도체 싸이클을 가장 먼저 반영하는 지수.',
+    story:`<strong>1980년 1월 4일 100 포인트</strong>로 시작. 한국증권거래소(KRX)에 상장된 모든 보통주를 시가총액 가중 방식으로 산출하는 한국 대표 주가지수다.<br><br>
+코스피의 특성은 <strong>수출 의존도가 매우 높다</strong>는 점이다. 삼성전자·SK하이닉스·LG에너지솔루션 등 글로벌 경쟁력 있는 대형 수출 기업 비중이 크다. 때문에 <em>글로벌 반도체 싸이클, 원·달러 환율, 미국 연준 금리 정책에 민감하게 반응</em>한다.<br><br>
+<strong>역대 최고:</strong> 2021년 6월 3,316 포인트. 역대 최저: 1997년 외환위기 때 277.37.`,
+    facts:[
+      {label:'갱신 주기', value:'장중 실시간 (KST)'},
+      {label:'발표 기관', value:'한국거래소 (KRX)'},
+      {label:'역대 최고', value:'3,316 (2021.6)'},
+      {label:'시작 기준', value:'1980.1.4 = 100'},
+    ],
+    links:[
+      {label:'KRX 공식 코스피', url:'https://www.krx.co.kr/main/main.jsp'},
+      {label:'네이버 코스피', url:'https://finance.naver.com/sise/sise_index.naver?code=KOSPI'},
+    ]
+  },
+
+  {
+    id:'kosdaq', cat:'글로벌 지수', emoji:'🚀',
+    name:'코스닥 (KOSDAQ)', nameEn:'Korean Securities Dealers Automated Quotations',
+    badge:'badge-major', badgeText:'한국 기술·중소형',
+    liveKey:'kosdaq', stockSym:'^KQ11',
+    viewUrl:'https://finance.yahoo.com/quote/%5EKQ11/',
+    viewLabel:'코스닥 실시간',
+    tagline:'한국판 나스닥. 바이오·게임·콘텐츠 스타트업의 꿈이 숫자가 되는 곳. 변동성은 두 배.',
+    story:`<strong>1996년 개설</strong>. 미국 나스닥을 모델로 한 한국의 기술주·성장주 중심 시장이다. 코스피보다 상장 요건이 낮아 <em>바이오·IT·게임·엔터테인먼트</em> 기업들이 많이 포진해 있다.<br><br>
+코스닥의 변동성은 코스피보다 현저히 높다. "테마주"가 강하게 형성되는 시장이며, 개인 투자자 비중이 높아 심리적 쏠림이 심하다.<br><br>
+<strong>2000년 닷컴 버블 당시:</strong> 코스닥 지수가 2,834까지 치솟았다가 96% 폭락. 이 경험이 한국 투자자들에게 깊은 트라우마를 남겼다. 현재 기준은 1996년 7월 1일 = 1,000pt.`,
+    facts:[
+      {label:'갱신 주기', value:'장중 실시간 (KST)'},
+      {label:'발표 기관', value:'한국거래소 (KRX)'},
+      {label:'역대 최고', value:'2,834 (2000.3 닷컴)'},
+      {label:'특성', value:'바이오·기술·엔터 중심'},
+    ],
+    links:[
+      {label:'네이버 코스닥', url:'https://finance.naver.com/sise/sise_index.naver?code=KOSDAQ'},
+    ]
+  },
+
+  /* ─── 심리·공포 ─── */
+  {
+    id:'vix', cat:'심리·공포', emoji:'😰',
+    name:'VIX 공포지수', nameEn:'CBOE Volatility Index',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:null,
+    viewUrl:'https://www.cboe.com/tradable_products/vix/',
+    viewLabel:'CBOE 공식 VIX 실시간',
+    tagline:'시장이 앞으로 30일 동안 얼마나 요동칠 것인가를 옵션 가격으로 역산한 수치. 월스트리트의 "공포 체온계".',
+    story:`<strong>1993년 CBOE(시카고 옵션거래소)</strong>가 만든 지수로, S&P 500 옵션의 내재변동성을 종합해 시장 참여자들이 <em>"앞으로 한 달이 얼마나 불확실하다고 보는가"</em>를 숫자 하나로 압축한다.<br><br>
+VIX <strong>10~15: 극도의 안정</strong> — 오히려 위험 신호일 수 있다. 모두가 안심할 때 거품이 낀다.<br>
+VIX <strong>20~30: 주의 구간</strong> — 시장이 불안해하기 시작했다.<br>
+VIX <strong>30 이상: 공포</strong> — 2008년 금융위기 당시 89.5까지 치솟았다. 코로나 충격 때는 85.<br><br>
+역설적으로 <strong>VIX 급등 시점이 역사적 매수 타이밍</strong>이었다는 통계가 많다. 공포가 극에 달했을 때 시장은 이미 대부분의 나쁜 소식을 가격에 반영했기 때문이다.`,
+    facts:[
+      {label:'갱신 주기', value:'장중 실시간'},
+      {label:'발표 기관', value:'CBOE (시카고)'},
+      {label:'공포 기준선', value:'20 이상 = 주의'},
+      {label:'역대 최고', value:'89.5 (2008.10)'},
+    ],
+    links:[
+      {label:'TradingView VIX 차트', url:'https://www.tradingview.com/symbols/CBOE-VIX/'},
+      {label:'Investopedia 해설', url:'https://www.investopedia.com/terms/v/vix.asp'},
+    ]
+  },
+
+  {
+    id:'skew', cat:'심리·공포', emoji:'📐',
+    name:'SKEW 지수', nameEn:'CBOE SKEW Index',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:null,
+    viewUrl:'https://www.cboe.com/tradable_products/vix/cboe-skew-index/',
+    viewLabel:'CBOE SKEW 공식 페이지',
+    tagline:'VIX가 "지금 얼마나 무서운가"라면, SKEW는 "혹시 블랙스완이 오는 건 아닐까?"를 묻는 지수.',
+    story:`SKEW 지수는 <strong>블랙스완 — 극단적 하락 사건</strong>에 대한 보험료가 얼마나 비싼지를 측정한다. 정규 분포에서 벗어난 꼬리(tail) 위험에 대한 옵션 프리미엄을 수치화한 것이다.<br><br>
+<strong>100: 정상</strong> — 극단적 하락 위험이 별로 없다고 시장이 봄.<br>
+<strong>130 이상: 경계</strong> — 트레이더들이 꼬리 위험 방어에 큰돈을 쓰기 시작.<br>
+<strong>150+: 경고</strong> — 역사적으로 큰 충격 전에 이 구간에 들어온 사례들이 있음.<br><br>
+흥미로운 점은 VIX가 <strong>낮고</strong> SKEW가 <strong>높을 때</strong>가 가장 위험하다는 것. "겉으로는 평온하지만 속에서 뭔가 끓고 있다"는 신호다. <em>2021년 말 SKEW가 170을 넘어섰다. 이후 2022년 -20% 하락장이 왔다.</em>`,
+    facts:[
+      {label:'갱신 주기', value:'일별 (장 마감 후)'},
+      {label:'발표 기관', value:'CBOE'},
+      {label:'기준선', value:'100 = 정상'},
+      {label:'경계선', value:'130 이상 주의'},
+    ],
+    links:[
+      {label:'TradingView SKEW 차트', url:'https://www.tradingview.com/symbols/CBOE-SKEW/'},
+    ]
+  },
+
+  {
+    id:'cnn_fg', cat:'심리·공포', emoji:'📺',
+    name:'CNN 공포·탐욕 지수', nameEn:'CNN Fear & Greed Index',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:null,
+    viewUrl:'https://edition.cnn.com/markets/fear-and-greed',
+    viewLabel:'CNN Fear & Greed 실시간',
+    tagline:'7가지 시장 심리 지표를 합산한 0~100 점수. 0이면 극도의 공포, 100이면 극도의 탐욕.',
+    story:`CNN이 만든 복합 심리 지수. <strong>7가지 하위 지표</strong>를 동등 가중 평균:<br>
+①VIX (변동성) ②주가 모멘텀 ③풋/콜 비율 ④안전자산 수요 ⑤정크 본드 스프레드 ⑥시장 폭 ⑦주식 가격 강도<br><br>
+<strong>0~24: 극도의 공포</strong> · <strong>25~44: 공포</strong> · <strong>45~55: 중립</strong> · <strong>56~74: 탐욕</strong> · <strong>75~100: 극도의 탐욕</strong><br><br>
+워런 버핏의 격언을 수치로 구현한 것이다: <em>"남들이 탐욕스러울 때 두려워하고, 남들이 두려워할 때 탐욕스러워라."</em> 2020년 3월 코로나 충격 당시 이 지수는 2를 기록했다. 그것이 역사적 매수 타이밍이었다.`,
+    facts:[
+      {label:'갱신 주기', value:'실시간 (장중)'},
+      {label:'발표 기관', value:'CNN Business'},
+      {label:'구성 지표', value:'7개'},
+      {label:'중립값', value:'50'},
+    ],
+    links:[
+      {label:'Investopedia 해설', url:'https://www.investopedia.com/terms/f/fear-and-greed-index.asp'},
+    ]
+  },
+
+  {
+    id:'cfg', cat:'심리·공포', emoji:'₿',
+    name:'크립토 공포·탐욕 지수', nameEn:'Crypto Fear & Greed Index',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:'cfg',
+    viewUrl:'https://alternative.me/crypto/fear-and-greed-index/',
+    viewLabel:'alternative.me 실시간',
+    tagline:'비트코인 시장의 감정 온도계. 0이면 모두가 패닉, 100이면 모두가 FOMO. 이 페이지에서 직접 불러오는 실시간 수치.',
+    story:`<strong>alternative.me</strong>가 운영하는 암호화폐 시장 심리 지수. 비트코인 가격 변동성, 시장 거래량, SNS 버즈, 구글 트렌드, 도미넌스, 선물 프리미엄을 합산해 0~100으로 표현한다.<br><br>
+역설적 역발상 지표로 유명하다. <em>지수가 10 이하로 떨어졌을 때마다 역사적으로 매수 기회가 됐고, 90 이상에서는 조정이 왔다.</em><br><br>
+<strong>크립토 시장의 특성:</strong> 전통 금융보다 심리에 훨씬 더 크게 좌우된다. 기관보다 개인 비중이 높고, 24시간 거래되며, 규제 뉴스 하나에 30% 움직이는 시장이기에 이 지수의 극단값이 더욱 의미 있다.`,
+    facts:[
+      {label:'데이터 출처', value:'alternative.me API'},
+      {label:'갱신 주기', value:'이 페이지 로드 시 실시간'},
+      {label:'기준값', value:'50 = 중립'},
+      {label:'API 타입', value:'🟢 이 페이지 실시간 연결'},
+    ],
+    links:[
+      {label:'CoinMarketCap F&G', url:'https://coinmarketcap.com/charts/fear-and-greed-index/'},
+    ]
+  },
+
+  {
+    id:'aaii', cat:'심리·공포', emoji:'📋',
+    name:'AAII 투자자 심리 조사', nameEn:'AAII Investor Sentiment Survey',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:null,
+    viewUrl:'https://www.aaii.com/sentimentsurvey/sent_results',
+    viewLabel:'AAII 주간 설문 결과표',
+    tagline:'1987년부터 매주 미국 개인투자자에게 묻는다: "향후 6개월간 시장이 오를 것 같나요?"',
+    story:`<strong>1987년부터 매주 발표</strong>. 미국 개인투자자협회(AAII) 회원들의 향후 6개월 전망을 강세/중립/약세로 집계한다.<br><br>
+이 지표의 묘미는 <em>역발상 신호</em>다. 개인 투자자 심리는 종종 시장의 <strong>반대 방향 선행 지표</strong>가 된다.<br><br>
+역사적 평균: 강세 38%, 중립 31.5%, 약세 30.5%. 강세가 <strong>50%+</strong>면 과도한 낙관 경고. 약세가 <strong>50%+</strong>면 역설적으로 반등 신호.<br><br>
+<strong>2022년 9월:</strong> 약세 비율 60.9% — 35년 만에 최고치. <em>이후 2023년 S&P500 +24% 상승. 모두가 가장 비관적이었던 그 순간이 정확히 바닥이었다.</em>`,
+    facts:[
+      {label:'갱신 주기', value:'매주 목요일'},
+      {label:'발표 기관', value:'AAII'},
+      {label:'역사적 강세 평균', value:'38%'},
+      {label:'시작 연도', value:'1987년'},
+    ],
+    links:[
+      {label:'AAII 히스토리컬 데이터', url:'https://www.aaii.com/files/surveys/sentiment.xls'},
+    ]
+  },
+
+  {
+    id:'naaim', cat:'심리·공포', emoji:'💼',
+    name:'NAAIM 익스포저 인덱스', nameEn:'NAAIM Exposure Index',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:null,
+    viewUrl:'https://naaim.org/programs/naaim-exposure-index/',
+    viewLabel:'NAAIM 주간 차트 & 데이터',
+    tagline:'미국 액티브 펀드매니저들이 실제로 주식을 얼마나 들고 있는지. 말이 아닌 "돈의 방향".',
+    story:`<strong>NAAIM(전미 액티브 투자자 협회)</strong>이 소속 펀드매니저들의 주식 보유 비중을 매주 수요일 집계. AAII 설문과의 차이는 <em>"실제 포지션"</em>이라는 점이다.<br><br>
+<strong>익스포저 90%+:</strong> 더 살 여력이 없음 = 상승 여력 제한 신호.<br>
+<strong>익스포저 30%↓:</strong> 프로들도 빠졌다 = 반등 여력 생기는 구간.<br><br>
+<em>2022년 10월, 시장 바닥에서 이 지수가 19.2까지 떨어졌다.</em> 그 이후 S&P 500은 1년 만에 약 +35% 상승했다. 프로들이 가장 두려워한 순간이 또다시 최고의 진입 타이밍이었다.`,
+    facts:[
+      {label:'갱신 주기', value:'매주 수요일'},
+      {label:'발표 기관', value:'NAAIM'},
+      {label:'응답자', value:'액티브 펀드매니저'},
+      {label:'범위', value:'-200 ~ +200%'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'put_call', cat:'심리·공포', emoji:'⚖️',
+    name:'Put / Call 비율', nameEn:'CBOE Put/Call Ratio',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:null,
+    viewUrl:'https://www.cboe.com/data/historical-options-data/options-put-call-ratios/',
+    viewLabel:'CBOE Put/Call 데이터',
+    tagline:'하락 베팅(풋) vs 상승 베팅(콜)의 비율. 군중이 어느 방향에 몰려있는지를 보여주는 심리 지표.',
+    story:`옵션 시장에서 <strong>풋(Put)</strong>은 "떨어질 것"에 베팅, <strong>콜(Call)</strong>은 "오를 것"에 베팅하는 계약이다.<br><br>
+<strong>비율 1 초과:</strong> 하락 베팅 우세 = 시장이 비관적 → 역발상 상승 신호.<br>
+<strong>비율 0.7 이하:</strong> 상승 베팅 압도 = 과도한 낙관 = 조정 경고.<br><br>
+CBOE는 종목별·지수 전용·전체 세 가지로 발표한다. <em>개인 투자자는 콜 선호, 기관은 풋(헤지) 선호</em> 경향이 있어서 이 비율로 두 주체의 상대적 활동을 가늠할 수 있다.`,
+    facts:[
+      {label:'갱신 주기', value:'실시간 / 일별'},
+      {label:'발표 기관', value:'CBOE'},
+      {label:'과매도 신호', value:'1.2 이상'},
+      {label:'과매수 신호', value:'0.6 이하'},
+    ],
+    links:[
+      {label:'TradingView P/C 차트', url:'https://www.tradingview.com/symbols/CBOE-PCC/'},
+    ]
+  },
+
+  /* ─── 경기 선행 ─── */
+  {
+    id:'bdi', cat:'경기 선행', emoji:'🚢',
+    name:'발틱 운임 지수', nameEn:'Baltic Dry Index (BDI)',
+    badge:'badge-leading', badgeText:'경기 선행',
+    liveKey:null,
+    viewUrl:'https://tradingeconomics.com/commodity/baltic',
+    viewLabel:'Trading Economics BDI 실시간',
+    tagline:'철광석·석탄·곡물 화물선의 운임 지수. 투기가 없어 가장 거짓말을 못 하는 경기 지표.',
+    story:`<strong>1985년 런던 발틱거래소</strong>가 만든 이 지수는 벌크선 23개 항로의 평균 운임을 종합한다. 철광석·석탄·곡물을 실어 나르는 배들의 "택시 요금"이다.<br><br>
+BDI의 강점은 <em>금융 파생상품이 없다</em>는 것이다. 오직 실제 화물 수요와 선박 공급만으로 가격이 형성되기에 "<strong>가장 거짓말을 못 하는 경기 지표</strong>"라 불린다.<br><br>
+BDI 상승 → 전 세계 공장에 원자재 주문 ↑ → 경기 회복 신호.<br>
+BDI 급락 → 실물 수요 둔화 → 경기 침체 선행 신호.<br><br>
+<em>2008년 금융위기 때 BDI는 11,793에서 663으로 94% 폭락했다 — 주식 시장이 무너지기 수개월 전에 이미 신호를 보내고 있었다.</em>`,
+    facts:[
+      {label:'갱신 주기', value:'매 영업일'},
+      {label:'발표 기관', value:'Baltic Exchange (런던)'},
+      {label:'역대 최고', value:'11,793 (2008.5)'},
+      {label:'역대 최저', value:'290 (2016.2)'},
+    ],
+    links:[
+      {label:'Investing.com BDI', url:'https://www.investing.com/indices/baltic-dry-index'},
+    ]
+  },
+
+  {
+    id:'yield_curve', cat:'경기 선행', emoji:'📉',
+    name:'장단기 금리 역전', nameEn:'Yield Curve — 2s10s Spread',
+    badge:'badge-leading', badgeText:'경기 선행',
+    liveKey:null,
+    viewUrl:'https://fred.stlouisfed.org/series/T10Y2Y',
+    viewLabel:'FRED 10Y-2Y 스프레드 차트',
+    tagline:'2년물과 10년물 국채 금리차. 역전되면 역사적으로 경기침체 전조였다 — 7번 중 6번 맞췄다.',
+    story:`정상 세계에서는 <strong>장기 금리 > 단기 금리</strong>. 그런데 이것이 뒤집히는 금리 역전이 발생하면 시장은 긴장한다.<br><br>
+<strong>역전의 의미:</strong> 투자자들이 단기 미래를 더 불안하게 보고 있다. 연준이 경기를 억누르기 위해 단기 금리를 너무 높이 올렸다는 신호.<br><br>
+<em>1970년 이후 미국의 7번 경기침체 중 6번 직전에 금리 역전이 있었다.</em> 역전 후 평균 12~18개월 뒤 침체 도래. 단, 신호를 보내고도 침체가 오지 않은 "거짓 경보"도 있었다.<br><br>
+<strong>2022년 7월</strong> 역전 발생. 2023년 침체 컨센서스가 강했지만 미국 경제는 연착륙에 성공했다 — 이번엔 거짓 경보였을까, 아직 지연 중인 걸까?`,
+    facts:[
+      {label:'갱신 주기', value:'매 영업일'},
+      {label:'데이터 출처', value:'FRED (연방준비은행)'},
+      {label:'침체 선행 기간', value:'역전 후 평균 12~18개월'},
+      {label:'역사적 적중률', value:'7번 중 6번'},
+    ],
+    links:[
+      {label:'Investopedia 해설', url:'https://www.investopedia.com/terms/i/invertedyieldcurve.asp'},
+    ]
+  },
+
+  {
+    id:'buffett', cat:'경기 선행', emoji:'🎩',
+    name:'워런 버핏 지표', nameEn:'Buffett Indicator (Mkt Cap / GDP)',
+    badge:'badge-leading', badgeText:'경기 선행',
+    liveKey:null,
+    viewUrl:'https://currentmarketvaluation.com/models/buffett-indicator.php',
+    viewLabel:'버핏 지표 실시간 계산기',
+    tagline:'주식 시장 전체 시가총액 ÷ GDP. 버핏이 "가장 좋아하는 단일 밸류에이션 지표"라고 직접 언급한 것.',
+    story:`<strong>2001년 버핏이 Fortune 지에 기고</strong>하며 소개. 계산: (전체 상장 시가총액) ÷ GDP × 100.<br><br>
+버핏의 논리: <em>"주식 시장은 경제를 소유하는 것이므로, 주식 가치가 경제보다 훨씬 크면 과대평가된 것이다."</em><br><br>
+<strong>70~90%: 저평가</strong> | <strong>90~115%: 적정</strong> | <strong>115~135%: 과열 주의</strong> | <strong>135%+: 위험</strong><br><br>
+<em>2021년 말 이 지수는 210%를 넘었다 — 역대 최고치. IT 버블 때도 160%였다.</em> 이후 2022년 약세장(-25%)이 왔다. 현재도 역사적 고점권이라는 점에서 지속 모니터링이 필요하다.`,
+    facts:[
+      {label:'계산법', value:'시총 ÷ GDP × 100'},
+      {label:'데이터 출처', value:'Fed / BEA'},
+      {label:'위험 기준선', value:'135% 이상'},
+      {label:'역대 최고', value:'약 210% (2021말)'},
+    ],
+    links:[
+      {label:'Investopedia 해설', url:'https://www.investopedia.com/terms/m/marketcapgdp.asp'},
+    ]
+  },
+
+  {
+    id:'copper_gold', cat:'경기 선행', emoji:'🥇',
+    name:'구리 / 금 비율', nameEn:'Copper to Gold Ratio',
+    badge:'badge-leading', badgeText:'경기 선행',
+    liveKey:null,
+    viewUrl:'https://www.macrotrends.net/2543/copper-to-gold-ratio-historical-chart',
+    viewLabel:'Macrotrends 비율 차트',
+    tagline:'"경제 박사 구리"와 "안전자산 금"의 비율. 경기 싸이클을 미리 읽는 숨겨진 도구.',
+    story:`<strong>구리(Copper)</strong>는 전선·배관·자동차·건설 등 실물 경제의 모든 곳에 쓰인다. 반면 <strong>금(Gold)</strong>은 공포와 불확실성이 높을 때 오르는 안전자산.<br><br>
+<strong>비율 상승:</strong> 구리↑·금↓ → 경기 회복 기대, 위험자산 선호 → 주식 우호적.<br>
+<strong>비율 하락:</strong> 구리↓·금↑ → 경기 둔화 우려, 안전 선호 → 채권·금 유리.<br><br>
+이 비율은 <em>미국 10년물 국채 금리와 높은 상관관계</em>를 가진다. 제프리 건들락 등 유명 채권 운용자들이 금리 방향 가늠에 즐겨 사용한다.`,
+    facts:[
+      {label:'계산법', value:'구리 선물가 ÷ 금 선물가'},
+      {label:'상관 지표', value:'미국 10년물 금리'},
+      {label:'구리 별명', value:'"Dr. Copper"'},
+      {label:'갱신 주기', value:'실시간'},
+    ],
+    links:[
+      {label:'FRED 구리 가격', url:'https://fred.stlouisfed.org/series/PCOPPUSDM'},
+    ]
+  },
+
+  {
+    id:'lei', cat:'경기 선행', emoji:'🔭',
+    name:'미국 경기선행지수 (LEI)', nameEn:'Conference Board Leading Economic Index',
+    badge:'badge-leading', badgeText:'경기 선행',
+    liveKey:null,
+    viewUrl:'https://www.conference-board.org/topics/us-leading-indicators',
+    viewLabel:'Conference Board LEI 공식 발표',
+    tagline:'10개의 선행 지표를 합산한 미국 경기 예보관. 3개월 연속 하락하면 침체 경고.',
+    story:`<strong>컨퍼런스 보드</strong>가 1959년부터 매달 발표. 10개 구성: ①실업급여 신청 ②ISM 신규 주문 ③소비자 기대 ④S&P 500 ⑤주택 착공 허가 ⑥금리 스프레드 등.<br><br>
+<strong>경험칙:</strong> <em>3개월 연속 하락 = 경기침체 조기 경고.</em> 실제로 대부분의 침체를 평균 6~9개월 앞서 신호를 보냈다.<br><br>
+2022년 2월 ~ 2023년까지 LEI가 <strong>23개월 연속 하락</strong> — 사상 최장기 연속 하락. 그러나 경기침체는 오지 않았다. 노동시장의 강건함이 버텨준 덕분이다. "어떤 지표도 100% 완벽하지 않다"는 것을 다시 일깨워 준 사례.`,
+    facts:[
+      {label:'갱신 주기', value:'월별 (셋째 주)'},
+      {label:'발표 기관', value:'The Conference Board'},
+      {label:'구성 지표', value:'10개'},
+      {label:'침체 경고 기준', value:'3개월 연속 하락'},
+    ],
+    links:[]
+  },
+
+  /* ─── 도시전설 ─── */
+  {
+    id:'bigmac', cat:'도시전설', emoji:'🍔',
+    name:'빅맥 지수', nameEn:'Big Mac Index',
+    badge:'badge-alt', badgeText:'도시전설',
+    liveKey:null,
+    viewUrl:'https://www.economist.com/big-mac-index',
+    viewLabel:'이코노미스트 빅맥지수 인터랙티브',
+    tagline:'맥도날드 빅맥 가격으로 각국 통화의 구매력을 비교하는 경제학자들의 창의적 발명품. 1986년생.',
+    story:`<strong>1986년 이코노미스트(The Economist)</strong>가 처음 발표. 처음엔 농담처럼 시작됐지만, 지금은 <em>전 세계 경제학 교과서에 실리는 진지한 지표</em>가 됐다.<br><br>
+빅맥은 전 세계 어디서나 거의 같은 방식으로 만들어지므로, 나라마다 다른 가격은 <strong>구매력 평가(PPP) 환율</strong>과 실제 환율의 차이를 반영한다는 것이다.<br><br>
+<em>예시: 미국 $5.69, 한국 ₩5,600이라면 PPP 환율 984원/달러. 실제 환율 1,340원이면 원화 약 27% 저평가.</em><br><br>
+이코노미스트는 여기서 멈추지 않고 <strong>"아보카도 토스트 지수", "라떼 지수"</strong> 등 파생 지수도 만들었다.`,
+    facts:[
+      {label:'갱신 주기', value:'연 2회 (1월, 7월)'},
+      {label:'발표 기관', value:'The Economist'},
+      {label:'비교 국가', value:'약 60개국'},
+      {label:'시작 연도', value:'1986년'},
+    ],
+    links:[
+      {label:'Investopedia 해설', url:'https://www.investopedia.com/terms/b/big-mac-index.asp'},
+    ]
+  },
+
+  {
+    id:'lipstick', cat:'도시전설', emoji:'💄',
+    name:'립스틱 지수', nameEn:'Lipstick Index',
+    badge:'badge-alt', badgeText:'도시전설',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/terms/l/lipstick-index.asp',
+    viewLabel:'Investopedia 상세 해설',
+    tagline:'불황이 깊어질수록 고가 립스틱이 더 잘 팔린다. 에스티 로더 회장이 발견한 작은 사치의 경제학.',
+    story:`<strong>레너드 로더(Leonard Lauder)</strong>, 에스티 로더 그룹 회장이 2001년 9·11 이후 매출 데이터를 분석하다 발견한 패턴. 경기 침체 시 명품 가방 대신 <em>"조금 비싼 립스틱"</em>을 선택하는 소비 행동이다.<br><br>
+<strong>검증된 사례들:</strong><br>
+- 2001년 경기침체: 에스티 로더 립스틱 판매 +11%<br>
+- 2008년 금융위기: 고가 립스틱 전반적 판매 증가 확인<br>
+- 2020년 코로나: 마스크 착용으로 이 지수가 <em>"아이섀도우 지수"</em>로 진화<br><br>
+단, 모든 불황에서 일관성이 있지는 않다는 반박 연구도 존재한다.`,
+    facts:[
+      {label:'제창자', value:'레너드 로더 (에스티 로더)'},
+      {label:'발견 시기', value:'2001년 9/11 이후'},
+      {label:'신호 의미', value:'고가 립스틱↑ = 불황'},
+      {label:'파생 버전', value:'아이섀도우 지수 (코로나 후)'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'underwear', cat:'도시전설', emoji:'🩲',
+    name:'남성 속옷 지수', nameEn:"Men's Underwear Index",
+    badge:'badge-alt', badgeText:'도시전설',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/terms/m/mens-underwear-index.asp',
+    viewLabel:'Investopedia 상세 해설',
+    tagline:'불황이 오면 남자들은 속옷을 안 산다. 아무도 안 보니까. 앨런 그린스펀이 진짜로 쓴 지표.',
+    story:`이 지수는 <strong>전 연준 의장 앨런 그린스펀</strong>이 실제로 경기 분석에 사용했다고 알려지면서 유명해졌다.<br><br>
+그의 논리: 남성 속옷은 매우 비탄력적인 소비재다. 경기가 좋든 나쁘든 어느 정도는 꼭 사야 한다. 그런데 <em>극도의 불황이 오면 아무도 안 보는 속옷부터 교체를 미루기 시작한다.</em><br><br>
+<strong>NPD 그룹</strong> 시장조사 데이터로 검증됨. 2008~2009년 금융위기 당시 미국 남성 속옷 매출이 2.3% 감소했고, 회복은 경기 반등보다 약 6개월 후에 나타났다.<br><br>
+그린스펀이 NPR 인터뷰에서 직접 말했다: <em>"남성 속옷 판매량은 경제의 놀라울 정도로 좋은 지표다."</em>`,
+    facts:[
+      {label:'제창자', value:'앨런 그린스펀 (전 연준 의장)'},
+      {label:'신호 의미', value:'판매 감소 = 불황 심화'},
+      {label:'회복 선행성', value:'경기 회복보다 6개월 후 반등'},
+      {label:'데이터', value:'NPD Group 시장조사'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'pentagon', cat:'도시전설', emoji:'🍕',
+    name:'펜타곤 피자 지수', nameEn:'Pentagon Pizza Index',
+    badge:'badge-alt', badgeText:'도시전설',
+    liveKey:null,
+    viewUrl:'https://qz.com/65062/how-to-tell-when-were-going-to-war-with-dominos-pizza/',
+    viewLabel:'Quartz 원문 기사 (2012)',
+    tagline:'심야 피자 배달 앱이 우연히 발견했다: 펜타곤에 피자가 많이 배달될수록 세계 어딘가에서 전쟁이 임박한다.',
+    story:`이것은 실제로 있었던 일이다. <strong>1990년대 워싱턴 DC의 피자 배달 업체들</strong>이 데이터를 분석하다 기묘한 패턴을 발견했다. 펜타곤·국무부·CIA 랭글리 주변으로의 <em>심야 피자 주문이 급증하는 날들</em>이 있었고, 그 직후 국제 분쟁이 발발하거나 중요한 외교 사건이 터졌다.<br><br>
+분석관들, 장성들, 고위 관료들이 야근을 시작하면 먹을 게 필요하다. 그리고 가장 빠르게 시킬 수 있는 건 피자다.<br><br>
+이 패턴은 <strong>1990년 걸프전 직전</strong>, <strong>1993년 블랙호크 다운</strong> 전후, <strong>2003년 이라크 침공</strong> 전에도 확인됐다고 알려졌다. 물론 공식 검증된 데이터는 없다.<br><br>
+<em>지금도 일부 OSINT 커뮤니티는 반쯤 농담처럼 DC 주변 피자 주문량을 모니터링한다.</em>`,
+    facts:[
+      {label:'기원', value:'1990년대 DC 배달 데이터'},
+      {label:'신호 의미', value:'심야 주문 급증 = 위기 임박'},
+      {label:'검증 여부', value:'비공식 (도시전설)'},
+      {label:'관련 사건', value:'걸프전, 이라크 침공 전 패턴'},
+    ],
+    links:[
+      {label:'Washington Post 관련 기사', url:'https://www.washingtonpost.com/politics/2019/07/08/white-house-pizza-order-clue-chaos-trump-administration/'},
+    ]
+  },
+
+  {
+    id:'superbowl', cat:'도시전설', emoji:'🏈',
+    name:'슈퍼볼 인디케이터', nameEn:'Super Bowl Indicator',
+    badge:'badge-alt', badgeText:'도시전설',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/terms/s/superbowlindicator.asp',
+    viewLabel:'Investopedia 상세 해설',
+    tagline:'슈퍼볼에서 오래된 NFL 팀이 이기면 주가 상승, AFL 출신 팀이 이기면 하락 — 50년간 약 70% 적중.',
+    story:`<strong>1978년 스포츠 칼럼니스트 레너드 코펫(Leonard Koppett)</strong>이 발표한 이 이론은 미국 스포츠와 금융을 가장 황당하게 연결한 지표다.<br><br>
+슈퍼볼에서 <strong>구(舊) NFL 소속 팀</strong>(49ers, Giants 등)이 우승하면 그 해 주식 상승, <strong>구(舊) AFL 출신</strong>(Chiefs, Raiders 등)이 우승하면 하락한다는 것이다.<br><br>
+<em>1966년부터 발표 시점까지 약 70%의 적중률</em>을 보였다. 통계적으로 순수 우연(50%)보다 훨씬 높은 수치다.<br><br>
+하지만 당연히 <strong>인과관계가 없는 상관관계</strong>의 교과서적 예시다. 샘플 크기 50개면 우연히 이 정도 적중률이 나올 수 있다.`,
+    facts:[
+      {label:'제창자', value:'레너드 코펫 (1978)'},
+      {label:'적중률', value:'약 70% (1966~)'},
+      {label:'NFL팀 우승 시', value:'주가 상승 신호'},
+      {label:'결론', value:'인과관계 없음 (재미로만)'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'skyscraper', cat:'도시전설', emoji:'🏙️',
+    name:'마천루 저주', nameEn:'Skyscraper Curse / Skyscraper Index',
+    badge:'badge-alt', badgeText:'도시전설',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/terms/s/skyscraper-curse.asp',
+    viewLabel:'Investopedia 마천루 저주 해설',
+    tagline:'세계 최고층 빌딩 완공 시점이 경기침체와 묘하게 겹친다. 1999년 도이체방크 분석가가 진지하게 분석한 이론.',
+    story:`<strong>1999년 도이체방크 분석가 앤드루 로런스</strong>가 발표. 세계에서 가장 높은 빌딩 완공 시점이 금융위기·경기침체와 반복적으로 겹친다는 관찰이다.<br><br>
+<strong>사례들:</strong><br>
+- 1929년 크라이슬러·엠파이어스테이트 빌딩 완공 → 대공황<br>
+- 1972년 WTC 완공 → 1973년 오일쇼크<br>
+- 1998년 페트로나스 타워 완공 → 아시아 금융위기<br>
+- 2010년 부르즈 칼리파 완공 → 두바이 부채 위기<br><br>
+<em>논리: 역대 최고층 건설을 결정할 만큼의 자신감은 경기 고점에서 나온다. 하지만 완공까지 5~10년이 걸리기 때문에, 완공 시점에는 이미 경기가 꺾여 있는 경우가 많다.</em>`,
+    facts:[
+      {label:'제창자', value:'앤드루 로런스 (1999)'},
+      {label:'발표 기관', value:'도이체방크'},
+      {label:'현재 세계 최고층', value:'부르즈 칼리파 828m'},
+      {label:'다음 예정', value:'젯다 타워 1,000m (공사 중)'},
+    ],
+    links:[
+      {label:'CTBUH 세계 최고층 빌딩', url:'https://www.ctbuh.org/resource/height-statistics'},
+    ]
+  },
+
+  {
+    id:'bitcoin_live', cat:'심리·공포', emoji:'₿',
+    name:'비트코인 실시간 가격', nameEn:'Bitcoin / USD — Live',
+    badge:'badge-fear', badgeText:'심리·공포',
+    liveKey:'btc',
+    viewUrl:'https://www.coingecko.com/en/coins/bitcoin',
+    viewLabel:'CoinGecko BTC 상세 페이지',
+    tagline:'2009년 사토시 나카모토가 만든 탈중앙화 디지털 화폐. 지금 가격은 이 페이지에서 직접 실시간으로 불러온다.',
+    story:`비트코인은 <strong>2008년 금융위기</strong> 직후 "중앙기관 없이 작동하는 화폐"라는 아이디어에서 탄생했다. 사토시 나카모토가 2009년 1월 3일 제네시스 블록을 채굴하며 시작됐다.<br><br>
+시장에서 비트코인은 종종 <em>"디지털 금"</em>으로 불린다 — 공급량이 2,100만 BTC로 고정돼 있기 때문이다. 하지만 금보다 변동성이 훨씬 크다.<br><br>
+흥미로운 것은 비트코인 가격과 전통 금융 시장의 관계다. 2020~2021년에는 리스크온 자산으로 주식과 함께 올랐고, 2022년에는 주식보다 더 크게 빠졌다. <em>아직 그 정체성이 정의되지 않은 자산</em>이다.<br><br>
+이 카드의 데이터는 <strong>CoinGecko 공개 API</strong>를 통해 페이지 로딩 시 직접 불러오고 있다.`,
+    facts:[
+      {label:'데이터 출처', value:'CoinGecko API (무료)'},
+      {label:'갱신 주기', value:'페이지 로드 시 실시간'},
+      {label:'최대 공급량', value:'21,000,000 BTC'},
+      {label:'API 타입', value:'🟢 이 페이지 실시간 연결'},
+    ],
+    links:[
+      {label:'CoinMarketCap BTC', url:'https://coinmarketcap.com/currencies/bitcoin/'},
+    ]
+  },
+
+  /* ─── 마이너 지수 ─── */
+
+  {
+    id:'hemline', cat:'마이너 지수', emoji:'👗',
+    name:'헴라인 지수', nameEn:'Hemline Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/terms/h/hemline-theory.asp',
+    viewLabel:'Investopedia 헴라인 이론',
+    tagline:'치마가 짧아지면 주가가 오르고, 길어지면 하락한다. 1926년 경제학자가 진지하게 발표한 패션-시장 상관관계.',
+    story:`<strong>1926년 경제학자 조지 테일러(George Taylor)</strong>가 발표. 경기가 좋을 때 여성들이 실크 스타킹을 자랑하기 위해 치마를 짧게 입고, 불황이 오면 두꺼운 스타킹을 감추려 치마를 길게 입는다는 관찰에서 출발했다.<br><br>
+실제 검증 사례들: <em>1920년대 재즈 시대 = 미니스커트 유행 = 대호황</em>. <em>1930년대 대공황 = 롱스커트 복귀</em>. <em>1960년대 미니스커트 혁명 = 전후 최대 호황기</em>.<br><br>
+2010년 네덜란드 이레나 프란켄탈(Erasmus) 연구에서 패션 트렌드가 주가를 <strong>3년 후행</strong>한다는 결과가 나왔다. 즉 치마 길이는 선행지표가 아니라 후행지표에 가깝다는 반론도 존재한다.<br><br>
+<strong>현대 버전:</strong> 팬데믹 이후 "애슬레저 지수" (운동복 매출 증가 = 재택근무 확산 = 경기 둔화)로 진화 중이다.`,
+    facts:[
+      {label:'제창자', value:'조지 테일러 (1926)'},
+      {label:'신호 의미', value:'짧은 치마 = 호황'},
+      {label:'검증 방향', value:'후행 3년 (네덜란드 연구)'},
+      {label:'현대 파생', value:'애슬레저 지수'},
+    ],
+    links:[
+      {label:'The Economist 헴라인 분석', url:'https://www.economist.com/finance-and-economics/2010/09/09/the-hemline-index'},
+    ]
+  },
+
+  {
+    id:'crane', cat:'마이너 지수', emoji:'🏗️',
+    name:'크레인 지수', nameEn:'Crane Index / RLB Crane Count',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.us.rlb.com/crane-count/',
+    viewLabel:'RLB 크레인 카운트 공식 보고서',
+    tagline:'도시 하늘에 크레인이 몇 대 서 있는가. 북미 주요 도시의 건설 과열을 측정하는 가장 원시적이고 직관적인 지표.',
+    story:`부동산 컨설팅 회사 <strong>RLB(Rider Levett Bucknall)</strong>이 매년 북미 14개 도시를 직접 발로 뛰며 크레인 수를 세는 보고서를 발표한다. 2016년 첫 발표 이후 건설 업계의 필수 참고 자료가 됐다.<br><br>
+크레인의 특성: 한 대가 설치되면 최소 6~18개월 그 자리에 있다. 즉 <em>크레인 수는 과거의 투자 결정이 현재에 물리적으로 드러난 것</em>이다. 크레인이 많다 = 1~2년 전 자금이 넉넉했다는 뜻.<br><br>
+<strong>역설적 경보 신호:</strong> 크레인 수가 역대 최고를 기록할 때는 이미 건설 붐의 꼭짓점에 가깝다는 해석이 많다. <em>2019년 시애틀이 북미 최다 크레인 도시를 기록한 직후 팬데믹 충격으로 건설 시장이 얼어붙었다.</em><br><br>
+서울 기준으로는 공식 집계가 없지만, 서울 스카이라인 크레인 수는 부동산 경기의 비공식 체온계로 통한다.`,
+    facts:[
+      {label:'갱신 주기', value:'연 2회 (RLB 보고서)'},
+      {label:'발표 기관', value:'Rider Levett Bucknall'},
+      {label:'집계 도시', value:'북미 14개 주요 도시'},
+      {label:'의미', value:'크레인 많음 = 1~2년 전 호황'},
+    ],
+    links:[
+      {label:'RLB 크레인 카운트 보고서', url:'https://www.us.rlb.com/crane-count/'},
+    ]
+  },
+
+  {
+    id:'zombie', cat:'마이너 지수', emoji:'🧟',
+    name:'좀비 기업 비율', nameEn:'Zombie Company Ratio',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.bis.org/publ/work894.htm',
+    viewLabel:'BIS 좀비 기업 연구 원문',
+    tagline:'빚의 이자도 못 갚으면서 연명하는 기업의 비율. 저금리가 만든 좀비들이 많을수록 경제는 더 취약해진다.',
+    story:`<strong>좀비 기업(Zombie Company)</strong>은 영업이익으로 이자비용조차 감당 못 하면서 은행 대출이나 정부 지원으로 연명하는 기업이다. <strong>국제결제은행(BIS)</strong>이 2018년 보고서에서 이를 공식 지표화했다.<br><br>
+<strong>판별 기준:</strong> EBIT(이자·세전 이익) ÷ 이자비용 &lt; 1이 3년 연속 지속되는 기업.<br><br>
+저금리 시대의 부작용으로 크게 늘었다. <em>2000년대 초 미국 상장 기업의 좀비 비율은 약 2%였는데, 2020년 코로나 직후에는 20%에 육박했다.</em> 정상 금리가 돌아오면 이 좀비들이 한꺼번에 무너질 수 있다는 것이 2022~2023년 금리 인상기의 핵심 공포 중 하나였다.<br><br>
+한국도 한계기업(좀비 기업) 비율이 꾸준히 상승 중이다. <strong>한국은행 금융안정보고서</strong>가 매년 이를 추적한다.`,
+    facts:[
+      {label:'정의', value:'EBIT < 이자비용 3년 연속'},
+      {label:'발표 기관', value:'BIS / 각국 중앙은행'},
+      {label:'미국 좀비 비율 2020', value:'약 20%'},
+      {label:'위험 시점', value:'금리 급등 시 연쇄 도산'},
+    ],
+    links:[
+      {label:'한국은행 금융안정보고서', url:'https://www.bok.or.kr/portal/bbs/P0000559/list.do?menuNo=200765'},
+      {label:'Investopedia 좀비 기업', url:'https://www.investopedia.com/terms/z/zombie-company.asp'},
+    ]
+  },
+
+  {
+    id:'yacht', cat:'마이너 지수', emoji:'⛵',
+    name:'요트 판매 지수', nameEn:'Yacht Sales Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.boatinternational.com/yacht-market-intelligence',
+    viewLabel:'Boat International 마켓 리포트',
+    tagline:'최상위 0.1%의 소비를 추적한다. 경기 최고점에서만 팔리는 슈퍼요트 수주량은 부의 쏠림과 버블을 가장 먼저 보여준다.',
+    story:`요트는 <strong>가격이 수억~수천억 원</strong>에 달하는 가장 극단적인 사치재다. 수주부터 완성까지 2~5년이 걸리므로, 요트 발주량은 최상위 부유층의 미래 경기 전망을 반영한다.<br><br>
+<strong>슈퍼요트(24m 이상) 시장:</strong> 2021년 역대 최대 수주를 기록했다. 팬데믹 자산 가격 폭등의 직접적 결과였다. 이후 금리 인상 사이클에서 수주량이 급감했다.<br><br>
+역사적 패턴: <em>2007년 슈퍼요트 수주 사상 최고 → 2008년 금융위기 → 요트 시장 -50% 폭락</em>.<br><br>
+요트 지수가 흥미로운 이유는 <strong>"부자들의 자신감 지수"</strong>이기 때문이다. 전 세계 1000억 원 이상 자산가들이 돈을 쓰기 시작하면 경기가 진짜 좋다는 신호고, 이들이 지갑을 닫으면 머지않아 경기가 꺾인다는 신호다.`,
+    facts:[
+      {label:'슈퍼요트 기준', value:'24m(79ft) 이상'},
+      {label:'발주~완성 기간', value:'2~5년'},
+      {label:'2021년 수주량', value:'역대 최고 기록'},
+      {label:'주요 생산국', value:'이탈리아, 네덜란드, 독일'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'plastic_surgery', cat:'마이너 지수', emoji:'💉',
+    name:'성형수술 지수', nameEn:'Plastic Surgery Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.isaps.org/discover/about-isaps/global-statistics/',
+    viewLabel:'ISAPS 세계 성형수술 통계',
+    tagline:'불황이 와도 성형수술은 오히려 늘어난다. 그리고 경기 최고점에서도 늘어난다. 이유가 서로 다르다는 게 흥미롭다.',
+    story:`<strong>국제미용성형수술학회(ISAPS)</strong>가 발표하는 세계 성형수술 건수는 경기 지표로도 읽힌다. 그런데 방향이 독특하다. 성형수술은 <strong>호황과 불황 모두에서</strong> 늘어나는 경향이 있다.<br><br>
+<strong>호황기 증가 이유:</strong> 돈이 생기면 미루던 수술을 한다. 외모에 대한 투자를 사치가 아닌 "자기계발"로 인식.<br>
+<strong>불황기 증가 이유:</strong> 취업 경쟁이 치열해지면 외모 경쟁력에 투자. 실직 후 새 출발 심리.<br><br>
+<em>2020년 코로나 봉쇄 해제 후 '줌 붐(Zoom Boom)'이 발생했다. 화상회의로 자신의 얼굴을 매일 보게 된 사람들이 성형 상담을 급증시켰다. 2021년 세계 성형수술 건수는 역대 최고를 기록했다.</em><br><br>
+한국은 인구 대비 세계 1위 성형수술 국가다. 강남 성형외과 예약 대기 기간은 한국 경기의 비공식 지표로 통한다.`,
+    facts:[
+      {label:'발표 기관', value:'ISAPS'},
+      {label:'갱신 주기', value:'연간 통계'},
+      {label:'한국 순위', value:'인구 대비 세계 1위'},
+      {label:'코로나 효과', value:'줌 붐 — 역대 최고'},
+    ],
+    links:[
+      {label:'ISAPS 글로벌 통계', url:'https://www.isaps.org/discover/about-isaps/global-statistics/'},
+    ]
+  },
+
+  {
+    id:'google_recession', cat:'마이너 지수', emoji:'🔍',
+    name:'구글 경기침체 검색량', nameEn:'Google Trends "Recession" Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://trends.google.com/trends/explore?q=recession',
+    viewLabel:'Google Trends 실시간 확인',
+    tagline:'"recession" 검색량이 급증하기 시작하면 진짜 침체가 온다. 구글은 세계 최대의 공포 심리 측정기다.',
+    story:`구글 트렌드(Google Trends)는 특정 검색어의 상대적 검색량을 0~100으로 표현한다. 여기서 <strong>"recession"(경기침체)</strong> 검색량은 대중이 경제 불안을 언제 체감하기 시작하는지를 실시간으로 보여준다.<br><br>
+<strong>하버드 연구(2011):</strong> 구글 트렌드 데이터가 실업률, GDP 등 공식 통계보다 <em>경기 변화를 1~3개월 먼저</em> 감지할 수 있음을 검증했다. 사람들은 직장을 잃기 전에 먼저 검색을 시작한다.<br><br>
+<em>2008년 9월 리먼 브라더스 파산 직후 "recession" 검색량이 폭발적으로 증가했다. 2022년 6월, 연준이 75bp 금리인상을 단행한 직후에도 동일한 패턴이 나타났다.</em><br><br>
+현재 트렌드 지수를 실시간으로 확인하는 것만으로도 대중의 경기 공포 수준을 알 수 있다. <strong>70 이상 = 대중 공포 확산 신호</strong>로 보는 시각이 있다.`,
+    facts:[
+      {label:'데이터 출처', value:'Google Trends (무료 공개)'},
+      {label:'선행성', value:'공식 통계 대비 1~3개월 선행'},
+      {label:'경계선', value:'70 이상 = 대중 공포 확산'},
+      {label:'활용법', value:'구글 트렌드에서 직접 확인'},
+    ],
+    links:[
+      {label:'"경기침체" 한국 트렌드', url:'https://trends.google.com/trends/explore?q=%EA%B2%BD%EA%B8%B0%EC%B9%A8%EC%B2%B4&geo=KR'},
+      {label:'Investopedia 구글 트렌드', url:'https://www.investopedia.com/terms/g/google-trends.asp'},
+    ]
+  },
+
+  {
+    id:'cardboard', cat:'마이너 지수', emoji:'📦',
+    name:'골판지 상자 지수', nameEn:'Corrugated Box Shipment Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.fibre-box.org/resources/industry-data/',
+    viewLabel:'Fibre Box Association 산업 데이터',
+    tagline:'전 세계로 배송되는 택배 상자 물량. 아마존도 쿠팡도 결국 골판지 상자로 움직인다. e커머스 경기의 실물 지표.',
+    story:`<strong>골판지 상자(Corrugated Box)</strong>는 전 세계 모든 제조업, 유통, 소비재의 최종 포장재다. "상자 없이 움직이는 경제는 없다"는 말이 있을 만큼 실물 경제와 밀접하게 연동된다.<br><br>
+미국에서는 <strong>섬유상자협회(Fibre Box Association)</strong>가 월별 골판지 상자 출하량을 발표한다. 이 데이터는 GDP 성장률, 산업생산지수와 강한 상관관계를 보인다.<br><br>
+<em>2022년 골판지 상자 수요가 급감했다. 팬데믹 동안 온라인 쇼핑으로 재고를 쌓았던 소비자들이 지갑을 닫기 시작했다는 실물 증거였다.</em><br><br>
+<strong>한국 버전:</strong> CJ대한통운, 쿠팡로지스틱스의 택배 물동량 데이터가 비슷한 역할을 한다. 국내 소비 경기의 가장 빠른 실물 선행 지표 중 하나다.`,
+    facts:[
+      {label:'갱신 주기', value:'월별 (미국 FBA 기준)'},
+      {label:'발표 기관', value:'Fibre Box Association'},
+      {label:'상관 지표', value:'GDP 성장률, 소매판매'},
+      {label:'한국 유사 지표', value:'월별 택배 물동량 (국토부)'},
+    ],
+    links:[
+      {label:'국토부 택배 물동량 통계', url:'https://www.index.go.kr/unity/potal/indicator/IndexInfo.do?cdNo=&clasCd=&idxCd=F0191'},
+    ]
+  },
+
+  {
+    id:'dog_adoption', cat:'마이너 지수', emoji:'🐶',
+    name:'반려견 입양 지수', nameEn:'Pet Adoption Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.aspca.org/helping-people-pets/shelter-intake-and-surrender',
+    viewLabel:'ASPCA 입양 통계',
+    tagline:'반려견 입양이 늘면 사람들이 집에 있는 시간이 많아졌다는 뜻이다. 팬데믹이 만들어낸 새로운 경기 선행 지표.',
+    story:`반려견 입양은 경기가 <strong>"매우 좋거나" 또는 "갑자기 나빠졌을 때"</strong> 급증하는 흥미로운 패턴을 보인다.<br><br>
+<strong>경기 호황기 입양 증가:</strong> 여유가 생기면 감정적 소비가 늘고, 반려동물은 그 대표 품목이다.<br>
+<strong>경기 충격기 입양 증가:</strong> 2020년 코로나 봉쇄 기간, 전 세계 보호소 반려견 입양 대기자 수가 폭발적으로 늘었다. 재택근무로 집에 있게 되자 "지금이 아니면 언제 키우나"는 심리가 작동한 것이다.<br><br>
+<em>2020~2021년 미국에서는 "팬데믹 펫(Pandemic Pet)" 현상이 일어났다. 보호소 반려견이 동나고, 순종견 가격이 2~3배로 올랐다. 이후 2022~2023년 경제 재개와 함께 파양률도 급등했다 — 경기 지표의 어두운 면.</em><br><br>
+<strong>반려동물 용품 산업 ETF(PAWZ)</strong>의 주가는 이 트렌드를 추적하는 또 다른 방법이다.`,
+    facts:[
+      {label:'경기 신호', value:'급증 = 재택 증가 or 여유'},
+      {label:'팬데믹 효과', value:'2020년 보호소 반려견 품절'},
+      {label:'관련 지표', value:'반려동물 용품 소비 지출'},
+      {label:'ETF 추종', value:'PAWZ (반려동물 산업 ETF)'},
+    ],
+    links:[
+      {label:'PAWZ ETF', url:'https://www.proshares.com/our-etfs/equity/pawz'},
+    ]
+  },
+
+  {
+    id:'ikea', cat:'마이너 지수', emoji:'🛋️',
+    name:'이케아 빌리 책장 지수', nameEn:'IKEA Billy Bookcase Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.economist.com/graphic-detail/2019/01/31/ikea-is-a-better-guide-to-the-cost-of-living-than-the-big-mac',
+    viewLabel:'The Economist 이케아 지수 분석',
+    tagline:'빅맥 지수의 사촌. 전 세계 IKEA에서 팔리는 Billy 책장 하나의 가격으로 각국 물가를 비교한다.',
+    story:`<strong>이코노미스트가 2019년 발표</strong>한 빅맥 지수의 변형. IKEA의 가장 많이 팔리는 제품 중 하나인 <strong>Billy 책장(80×202cm)</strong>의 각국 가격을 비교해 구매력 평가(PPP)를 측정한다.<br><br>
+빅맥 지수와의 차이: 빅맥은 현지 인건비·식재료가 주된 원가지만, Billy 책장은 <strong>스웨덴에서 대량 생산된 동일한 제품이 각국으로 운송</strong>되므로 물류·관세·유통 마진 차이가 반영된다.<br><br>
+<em>한국 IKEA Billy 책장 가격(약 129,000원)과 미국 가격($79.99)을 비교하면 환율·물류비·관세의 복합 효과를 볼 수 있다.</em><br><br>
+이 지수는 특히 <strong>이케아가 없는 나라에는 적용이 불가</strong>하다는 치명적 한계가 있다. 그 나라가 이케아도 없을 만큼 소비 시장이 작다는 사실 자체가 또 다른 지표가 되기도 한다.`,
+    facts:[
+      {label:'기준 제품', value:'IKEA BILLY 책장 (80×202cm)'},
+      {label:'발표 기관', value:'The Economist (2019)'},
+      {label:'한계', value:'이케아 매장 있는 국가만 적용'},
+      {label:'비교 방식', value:'동일 SKU 각국 소비자가'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'haircut', cat:'마이너 지수', emoji:'✂️',
+    name:'헤어컷 지수', nameEn:'Haircut Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/articles/economics/10/haircut-index.asp',
+    viewLabel:'Investopedia 헤어컷 지수',
+    tagline:'남자 이발 비용이 저렴한 나라가 통화 저평가 국가다. 그리고 경기 불황이 오면 남자들은 이발을 미룬다.',
+    story:`헤어컷 지수는 두 가지 방향으로 작동하는 이중 지표다.<br><br>
+<strong>① 구매력 비교 지수로서:</strong> 이발은 현지에서만 제공 가능한 비교역재(non-tradable)다. 수입이 불가능하기 때문에 현지 인건비와 임대료 원가가 그대로 반영된다. 따라서 각국 이발비 비교는 <em>빅맥보다 더 순수한 생활 물가·임금 수준의 척도</em>가 된다.<br><br>
+<strong>② 경기 후행 지표로서:</strong> <em>불황이 오면 남자들은 이발 주기를 늘린다.</em> "조금만 더 기르자"는 심리가 작동한다. 미용실 매출 감소는 소비자 지출 위축의 가장 빠른 신호 중 하나다.<br><br>
+한국에서는 <strong>동네 이발소 vs 프리미엄 헤어샵 매출 비율</strong>이 경기 체감 지수로 활용된다. 불황이 오면 고급 헤어샵에서 동네 이발소로 이동하는 패턴이 뚜렷하다.`,
+    facts:[
+      {label:'지표 성격', value:'생활 물가 + 소비 심리'},
+      {label:'특징', value:'비교역재 → 순수 현지 물가'},
+      {label:'불황 신호', value:'이발 주기 연장, 저가 이동'},
+      {label:'한국 활용', value:'이발소 vs 헤어샵 매출 비율'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'office_vacancy', cat:'마이너 지수', emoji:'🏢',
+    name:'오피스 공실률 지수', nameEn:'Office Vacancy Rate',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeat/us-office-marketbeat',
+    viewLabel:'Cushman & Wakefield 분기 리포트',
+    tagline:'빈 사무실이 많을수록 기업들은 움츠러들고 있다. 재택근무 혁명이 이 지수를 영구적으로 바꿔놓았는지가 지금 최대 논쟁.',
+    story:`<strong>쿠시먼앤웨이크필드, CBRE</strong> 등 글로벌 부동산 서비스 회사들이 분기별로 발표. 전체 오피스 공간 중 임대되지 않은 비율을 나타낸다.<br><br>
+전통적으로 오피스 공실률 <strong>10% 이하 = 공급 부족·임대료 상승</strong>, <strong>15% 이상 = 수요 위축·경기 둔화</strong>의 신호로 해석됐다.<br><br>
+그런데 <em>팬데믹이 이 공식을 흔들었다.</em> 2024년 샌프란시스코 오피스 공실률은 <strong>35%</strong>를 넘어섰다. 뉴욕도 25%에 육박한다. 재택근무의 정착으로 "오피스 묵시록(Office Apocalypse)"이 현실화되고 있다는 시각이 있다.<br><br>
+서울 강남·여의도 오피스 공실률은 한국 기업 경기의 선행 지표다. 스타트업이 줄줄이 오피스를 반납하기 시작하면 그것이 IT 경기 한파의 신호다.`,
+    facts:[
+      {label:'갱신 주기', value:'분기별'},
+      {label:'발표 기관', value:'CBRE, Cushman & Wakefield'},
+      {label:'경계선', value:'15% 이상 = 수요 위축'},
+      {label:'SF 2024 공실률', value:'35%+ (역대 최고)'},
+    ],
+    links:[
+      {label:'CBRE 글로벌 오피스 리포트', url:'https://www.cbre.com/insights/reports/global-office-rent-tracker'},
+    ]
+  },
+
+  {
+    id:'alcohol', cat:'마이너 지수', emoji:'🍺',
+    name:'음주 경기 지수', nameEn:'Alcohol Sales Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.theiwsr.com/research/',
+    viewLabel:'IWSR 세계 음주 트렌드',
+    tagline:'불황에도 술은 팔린다. 아니, 더 팔린다. 하지만 어떤 술이 팔리느냐가 경기 방향을 알려준다.',
+    story:`주류 시장은 경기 침체의 고전적 수혜 섹터다. <em>"죄악주(Sin Stocks)"</em>라 불리는 담배·술·도박 관련 주식은 경기 방어적 성격을 가진다. 하지만 단순히 "많이 팔린다"보다 <strong>어떤 술이 팔리느냐</strong>가 핵심이다.<br><br>
+<strong>호황기 패턴:</strong> 고급 위스키, 프리미엄 와인, 샴페인 매출 급증.<br>
+<strong>불황기 패턴:</strong> 저가 맥주, PB 소주, 캔 칵테일, 집에서 마시는 저렴한 술 매출 급증. 고급 바는 줄고 편의점 주류 판매는 늘어난다.<br><br>
+<em>2020년 코로나 봉쇄 기간, 미국 주류 소매 판매는 +24% 급등했다. 그런데 레스토랑·바의 판매는 폭락했다. 집에서 혼자 마시는 "홈술"이 폭발한 것이다.</em><br><br>
+한국에서는 <strong>편의점 맥주 4캔 묶음 판매량</strong>이 비공식 경기 체감 지수로 통한다. 불황이 깊어질수록 이 조합이 잘 팔린다.`,
+    facts:[
+      {label:'불황 수혜주', value:'저가 주류, 편의점 채널'},
+      {label:'호황 수혜주', value:'프리미엄 위스키, 샴페인'},
+      {label:'코로나 홈술 효과', value:'소매 판매 +24% (2020)'},
+      {label:'한국 비공식 지표', value:'편의점 맥주 4캔 판매량'},
+    ],
+    links:[
+      {label:'Investopedia 죄악주 분석', url:'https://www.investopedia.com/terms/s/sinfulstock.asp'},
+    ]
+  },
+
+  {
+    id:'wedding', cat:'마이너 지수', emoji:'💒',
+    name:'웨딩드레스 지수', nameEn:'Wedding Dress Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.theknot.com/content/average-cost-of-wedding',
+    viewLabel:'The Knot 결혼 비용 연간 통계',
+    tagline:'결혼식 규모와 드레스 가격이 경기를 따라 출렁인다. 불황기엔 소규모 결혼이 늘고, 호황기엔 호화 결혼이 급증한다.',
+    story:`결혼은 인생에서 가장 큰 소비 이벤트 중 하나다. <strong>미국 평균 결혼 비용은 약 3만 달러(약 4천만 원)</strong>에 달하며, 이 숫자는 경기를 반영해 크게 출렁인다.<br><br>
+<strong>웨딩드레스 지수의 논리:</strong> 결혼을 결정하는 커플의 비율과 식 규모는 경제적 자신감을 반영한다. 불황기엔 작은 결혼식, 혼인율 감소, 저가 드레스 렌탈 증가. 호황기엔 대형 파티, 해외 허니문, 고가 드레스 구매가 늘어난다.<br><br>
+<em>2008년 금융위기 직후 미국 웨딩 산업 규모가 급감했고, 2021년 팬데믹 해방 직후 "복수 결혼(Revenge Wedding)" 붐이 일면서 역대 최대 규모로 반등했다.</em><br><br>
+한국에서는 <strong>혼인 건수(통계청 발표)</strong>가 경기 체감과 높은 상관관계를 보인다. 2023년 혼인 건수가 역대 최저를 기록했다는 사실 자체가 한국 경기의 단면이다.`,
+    facts:[
+      {label:'미국 평균 결혼 비용', value:'약 $30,000 (2023)'},
+      {label:'발표 기관', value:'The Knot 연간 통계'},
+      {label:'불황 신호', value:'혼인율 감소, 소규모 결혼 증가'},
+      {label:'한국 관련 지표', value:'월별 혼인 건수 (통계청)'},
+    ],
+    links:[
+      {label:'통계청 혼인 통계', url:'https://kosis.kr/search/search.do?query=%ED%98%BC%EC%9D%B8'},
+    ]
+  },
+
+  {
+    id:'high_heel', cat:'마이너 지수', emoji:'👠',
+    name:'하이힐 지수', nameEn:'High Heel Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.investopedia.com/articles/financial-theory/09/high-heels-indicator.asp',
+    viewLabel:'Investopedia 하이힐 지수',
+    tagline:'굽이 높아질수록 경기가 나빠진다. 헴라인의 반대 버전 — 불황일수록 여성들은 더 높은 굽을 신는다.',
+    story:`<strong>IBISWorld</strong>의 연구원 트레버 가우어(Trevor Gower)가 2011년 발표. 헴라인 지수와 정반대의 방향성을 주장한다.<br><br>
+<strong>논리:</strong> 불황기에 여성들은 저렴하면서도 강인하고 자신감 있어 보이는 하이힐을 선택한다. 높은 굽은 "나는 이 경기 속에서도 당당하다"는 심리적 방어 기제라는 것이다.<br><br>
+역사적 사례: <em>1930년대 대공황 때 하이힐이 유행했고, 2008~2009년 금융위기 때도 힐 높이가 평균 1인치 상승했다는 데이터가 있다.</em><br><br>
+<strong>단, 반론도 강하다:</strong> 2010년대 이후 스니커즈·플랫슈즈 문화가 확산되면서 힐 높이와 경기의 상관관계가 약해졌다는 주장이 있다. 패션 트렌드 자체가 경기와 무관하게 변하기 때문이다.<br><br>
+헴라인 지수(짧아지면 호황)와 하이힐 지수(높아지면 불황)는 서로 모순처럼 보이지만, 두 지표 모두 <em>"불안할 때 패션으로 자신감을 표현한다"</em>는 심리학적 공통 기반을 공유한다.`,
+    facts:[
+      {label:'제창자', value:'Trevor Gower / IBISWorld (2011)'},
+      {label:'신호 의미', value:'굽 높이 상승 = 경기 둔화'},
+      {label:'헴라인과 관계', value:'방향 반대, 심리 기반 동일'},
+      {label:'한계', value:'스니커즈 문화 확산으로 약화'},
+    ],
+    links:[]
+  },
+
+  {
+    id:'ambulance', cat:'마이너 지수', emoji:'🚑',
+    name:'구급차 출동 지수', nameEn:'Ambulance Call Volume Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.naemsp.org/resources/data-and-statistics/',
+    viewLabel:'NAEMSP 응급의료 통계',
+    tagline:'경기 침체가 깊어지면 사람들이 더 많이 쓰러진다. 스트레스·음주·의료 포기가 응급 출동 건수를 끌어올린다.',
+    story:`이것은 가장 어두운 경기 지표 중 하나다. <strong>구급차 출동 건수는 지역사회의 스트레스 수준을 직접적으로 반영</strong>한다. 경기 침체기에는 여러 경로로 응급 출동이 늘어난다.<br><br>
+<strong>경로 1 — 의료 포기:</strong> 의료비 부담으로 병원을 미루다가 응급 상황이 발생한다. 경기 침체기 응급실 방문자 중 "더 일찍 왔어야 했는데"의 비율이 높아진다.<br>
+<strong>경로 2 — 스트레스·음주:</strong> 실직, 부채, 가족 갈등으로 인한 스트레스가 음주, 폭력, 자해 관련 출동을 늘린다.<br>
+<strong>경로 3 — 고령층 위험:</strong> 난방비 절약으로 실내 온도를 낮추는 저소득 고령층의 저체온증·심혈관 관련 응급 출동이 증가한다.<br><br>
+<em>2008~2009년 미국 침체기, 가정폭력·알코올 관련 구급 출동이 통계적으로 증가했다는 연구가 다수 발표됐다.</em><br><br>
+이 지수는 경제가 숫자가 아닌 사람들의 삶에 미치는 영향을 보여주는 가장 날 것의 지표다.`,
+    facts:[
+      {label:'신호 의미', value:'출동 증가 = 사회적 스트레스 ↑'},
+      {label:'주요 원인', value:'의료 포기, 스트레스, 음주'},
+      {label:'발표 기관', value:'각국 소방·응급의료 통계'},
+      {label:'한국 관련', value:'소방청 119 출동 통계 (연간)'},
+    ],
+    links:[
+      {label:'소방청 119 통계연보', url:'https://www.nfa.go.kr/nfa/releaseinformation/statisticalinformation/main/'},
+    ]
+  },
+
+  {
+    id:'pawnshop', cat:'마이너 지수', emoji:'🏚️',
+    name:'전당포 지수', nameEn:'Pawnshop Activity Index',
+    badge:'badge-alt', badgeText:'마이너 지수',
+    liveKey:null,
+    viewUrl:'https://www.nationalpawnbrokers.org/page/Statistics',
+    viewLabel:'미국 전국전당포협회 통계',
+    tagline:'금반지와 명품백이 전당포로 향하기 시작하면 가계가 무너지고 있다는 뜻이다. 금융 취약층의 리트머스 시험지.',
+    story:`전당포(Pawnshop)는 가장 서민적이고 즉각적인 경기 체감 지표다. 신용카드도, 대출도 막힌 사람들이 마지막으로 가는 곳이기 때문이다.<br><br>
+<strong>전당포 거래 급증 = 가계 유동성 위기의 전조.</strong> 특히 금반지·귀금속·명품 시계·전자제품 담보 거래가 늘어나면, 중산층 아래 계층이 현금 압박을 받고 있다는 신호다.<br><br>
+<em>2008년 금융위기 동안 미국 전국 전당포 업체 수가 급증했고, EZ Corp·First Cash 등 전당포 체인 주가가 오히려 폭등했다. "위기는 전당포에게 호황이다."</em><br><br>
+<strong>현대 버전:</strong> 당근마켓·중고나라 같은 중고거래 플랫폼의 거래량 급증이 현대판 전당포 지수 역할을 한다. <em>2022년 고물가 시기 당근마켓 거래량이 역대 최고를 기록했다.</em> 사람들이 집 안의 물건을 팔기 시작했다는 뜻이다.`,
+    facts:[
+      {label:'신호 의미', value:'거래 급증 = 가계 유동성 위기'},
+      {label:'관련 주식', value:'EZ Corp, First Cash'},
+      {label:'현대 버전', value:'중고거래 플랫폼 거래량'},
+      {label:'한국 지표', value:'당근마켓 월간 거래액'},
+    ],
+    links:[
+      {label:'Investopedia 전당포 산업', url:'https://www.investopedia.com/articles/personal-finance/040715/how-do-pawnshops-make-money.asp'},
+    ]
+  },
+
+];
+</script>
+
+<!-- LIVE API FETCH -->
+<script>
+// ─── 1. Crypto Fear & Greed ───────────────────────────────────
+async function fetchFearGreed() {
+  try {
+    const r = await fetch('https://api.alternative.me/fng/?limit=1');
+    const d = await r.json();
+    const item = d.data?.[0];
+    if (!item) throw new Error('no data');
+
+    const val = parseInt(item.value);
+    const cls = item.value_classification;
+
+    document.getElementById('val-cfg').textContent = `${val} — ${cls}`;
+    document.getElementById('dot-cfg').className = 'api-dot live';
+
+    // Update gauge
+    updateGauge(val, cls);
+
+    // Update ticker
+    updateTickerItem('cfg', `CRYPTO F&G`, val, null, true);
+
+    // Update card live strip if present
+    const strip = document.getElementById('live-cfg');
+    if (strip) {
+      strip.querySelector('.ls-val').textContent = val;
+      const chgEl = strip.querySelector('.ls-change');
+      chgEl.textContent = cls;
+      chgEl.className = 'ls-change up';
+    }
+  } catch(e) {
+    document.getElementById('val-cfg').textContent = '오류';
+    const dot = document.getElementById('dot-cfg');
+    dot.className = 'api-dot';
+    dot.style.background = 'var(--red)';
+  }
+}
+
+// ─── 2. BTC + ETH (CoinGecko) ────────────────────────────────
+async function fetchCrypto() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true');
+    const d = await r.json();
+    const btc = d.bitcoin;
+    const eth = d.ethereum;
+
+    if (btc) {
+      const p = btc.usd.toLocaleString('en-US', {maximumFractionDigits:0});
+      const chg = btc.usd_24h_change?.toFixed(2);
+      const up = btc.usd_24h_change >= 0;
+      document.getElementById('val-btc').textContent = `$${p}  ${up?'+':''}${chg}%`;
+      document.getElementById('dot-btc').className = 'api-dot live';
+
+      updateTickerItem('btc', 'BTC', `$${p}`, `${up?'+':''}${chg}%`, up);
+
+      const strip = document.getElementById('live-btc');
+      if (strip) {
+        strip.querySelector('.ls-val').textContent = `$${p}`;
+        const chgEl = strip.querySelector('.ls-change');
+        chgEl.textContent = `${up?'+':''}${chg}%`;
+        chgEl.className = `ls-change ${up?'up':'dn'}`;
+      }
+    }
+
+    if (eth) {
+      const p = eth.usd.toLocaleString('en-US', {maximumFractionDigits:0});
+      const chg = eth.usd_24h_change?.toFixed(2);
+      const up = eth.usd_24h_change >= 0;
+      document.getElementById('val-eth').textContent = `$${p}  ${up?'+':''}${chg}%`;
+      document.getElementById('dot-eth').className = 'api-dot live';
+
+      updateTickerItem('eth', 'ETH', `$${p}`, `${up?'+':''}${chg}%`, up);
+    }
+
+  } catch(e) {
+    ['btc','eth'].forEach(k => {
+      document.getElementById(`val-${k}`).textContent = '오류';
+      const dot = document.getElementById(`dot-${k}`);
+      dot.className = 'api-dot';
+      dot.style.background = 'var(--red)';
+    });
+  }
+}
+
+// ─── 3. Stock Indices (Yahoo Finance via allorigins) ──────────
+const STOCK_MAP = {
+  'sp500':   { sym: '%5EGSPC', name: 'S&P 500', fmt: n => n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+  'nasdaq':  { sym: '%5EIXIC', name: 'NASDAQ',  fmt: n => n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+  'russell': { sym: '%5ERUT',  name: 'RUT2000', fmt: n => n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+  'kospi':   { sym: '%5EKS11', name: 'KOSPI',   fmt: n => n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+  'kosdaq':  { sym: '%5EKQ11', name: 'KOSDAQ',  fmt: n => n.toLocaleString('en-US',{maximumFractionDigits:2}) },
+};
+
+function extractYahooMeta(raw) {
+  const result = raw?.chart?.result?.[0];
+  if (!result) throw new Error('no result');
+  const meta = result.meta;
+  const price = meta.regularMarketPrice;
+  const prev  = meta.chartPreviousClose || meta.previousClose || meta.regularMarketPreviousClose;
+  const change = price - prev;
+  const changePct = (change / prev) * 100;
+  return { price, prev, change, changePct };
+}
+
+async function fetchOneStock(key) {
+  const info = STOCK_MAP[key];
+  const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${info.sym}?interval=1d&range=2d`;
+  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+
+  const ctl = new AbortController();
+  const tid = setTimeout(() => ctl.abort(), 8000);
+  try {
+    const r = await fetch(proxyUrl, { signal: ctl.signal });
+    clearTimeout(tid);
+    const wrapper = await r.json();
+    return extractYahooMeta(JSON.parse(wrapper.contents));
+  } catch(e) {
+    clearTimeout(tid);
+    throw e;
+  }
+}
+
+async function fetchStockIndices() {
+  let successCount = 0;
+  const keys = Object.keys(STOCK_MAP);
+
+  await Promise.allSettled(keys.map(async key => {
+    try {
+      const { price, changePct } = await fetchOneStock(key);
+      const info = STOCK_MAP[key];
+      const up = changePct >= 0;
+      const priceStr = info.fmt(price);
+      const chgStr = `${up?'+':''}${changePct.toFixed(2)}%`;
+
+      // Update ticker
+      updateTickerItem(key, info.name, priceStr, chgStr, up);
+
+      // Update card live strip
+      const strip = document.getElementById(`live-${key}`);
+      if (strip) {
+        strip.querySelector('.ls-val').textContent = priceStr;
+        const chgEl = strip.querySelector('.ls-change');
+        chgEl.textContent = chgStr;
+        chgEl.className = `ls-change ${up?'up':'dn'}`;
+      }
+
+      successCount++;
+    } catch(e) {
+      // silently fallback — ticker item stays as "..." link
+      updateTickerItem(key, STOCK_MAP[key].name, '—', null, null);
+    }
+  }));
+
+  const dot = document.getElementById('dot-stocks');
+  if (successCount > 0) {
+    document.getElementById('val-stocks').textContent = `${successCount}/${keys.length}개 연결됨`;
+    dot.className = 'api-dot live';
+  } else {
+    document.getElementById('val-stocks').textContent = '연결 실패 (딥링크 이용)';
+    dot.className = 'api-dot link';
+  }
+}
+
+// ─── GAUGE ───────────────────────────────────────────────────
+function updateGauge(val, cls) {
+  document.getElementById('gaugeScore').textContent = val;
+  const pct = Math.max(2, Math.min(98, val));
+  const pointer = document.getElementById('gaugePointer');
+  const tip = document.getElementById('gaugePointerTip');
+  const statusDot = document.getElementById('gaugeStatusDot');
+  const statusTxt = document.getElementById('gaugeStatusTxt');
+
+  pointer.style.left = pct + '%';
+  tip.textContent = val;
+
+  let color, msg;
+  if (val <= 24)      { color = '#ff2244'; msg = `극도의 공포 — ${cls}`; }
+  else if (val <= 44) { color = '#ff7700'; msg = `공포 구간 — ${cls}`; }
+  else if (val <= 55) { color = '#e8a000'; msg = `중립 — ${cls}`; }
+  else if (val <= 74) { color = '#88cc00'; msg = `탐욕 구간 — ${cls}`; }
+  else               { color = '#00e87a'; msg = `극도의 탐욕 — ${cls}`; }
+
+  statusDot.style.background = color;
+  statusDot.style.boxShadow  = `0 0 8px ${color}`;
+  statusTxt.textContent = msg + ' (크립토 시장 기준)';
+}
+</script>
+
+<!-- RENDER ENGINE -->
+<script>
+(function(){
+
+const CATS = {
+  '글로벌 지수': {icon:'📈'},
+  '심리·공포':  {icon:'🧠'},
+  '경기 선행':  {icon:'📡'},
+  '도시전설':   {icon:'🍕'},
+  '마이너 지수': {icon:'🔬'},
+};
+const CAT_ORDER = ['글로벌 지수','심리·공포','경기 선행','도시전설','마이너 지수'];
+const CAT_AD_AFTER = '심리·공포'; // insert mid ad after this section
+
+let currentCat = 'all';
+let currentQ   = '';
+let favorites  = JSON.parse(localStorage.getItem('iw_favs') || '[]');
+
+// ── TICKER SETUP ─────────────────────────────────────────────
+const TICKER_KEYS = [
+  {k:'sp500',   label:'S&P 500'},
+  {k:'nasdaq',  label:'NASDAQ'},
+  {k:'russell', label:'RUT2000'},
+  {k:'kospi',   label:'KOSPI'},
+  {k:'kosdaq',  label:'KOSDAQ'},
+  null, // separator
+  {k:'btc',     label:'BTC'},
+  {k:'eth',     label:'ETH'},
+  null,
+  {k:'cfg',     label:'CRYPTO F&G'},
+];
+
+function buildTickerHTML() {
+  const items = TICKER_KEYS.map(item => {
+    if (!item) return `<span style="color:var(--border2);padding:0 12px;border-right:1px solid var(--border)">·</span>`;
+    return `<span class="tk-item" id="tki-${item.k}">
+      <span class="tk-name">${item.label}</span>
+      <span class="tk-val tk-loading" id="tkv-${item.k}">…</span>
+    </span>`;
+  }).join('');
+  // duplicate for seamless loop
+  return items + items;
+}
+
+window.updateTickerItem = function(key, label, val, chg, up) {
+  const els = document.querySelectorAll(`#tkv-${key}`);
+  els.forEach(el => {
+    el.classList.remove('tk-loading');
+    if (up === null) {
+      el.textContent = val;
+      el.className = 'tk-val';
+    } else {
+      el.innerHTML = chg
+        ? `${val} <span class="tk-chg ${up?'up':'dn'}">${chg}</span>`
+        : val;
+    }
+  });
+};
+
+// ── BOOKMARKS ────────────────────────────────────────────────
+function isFav(id) { return favorites.includes(id); }
+function toggleFav(id) {
+  if (isFav(id)) {
+    favorites = favorites.filter(f => f !== id);
+  } else {
+    favorites.push(id);
+  }
+  localStorage.setItem('iw_favs', JSON.stringify(favorites));
+  // update all bookmark buttons for this id
+  document.querySelectorAll(`[data-bmid="${id}"]`).forEach(btn => {
+    btn.textContent = isFav(id) ? '⭐' : '☆';
+    btn.classList.toggle('on', isFav(id));
+    btn.closest('.card')?.classList.toggle('bookmarked', isFav(id));
+  });
+  showToast(isFav(id) ? '⭐ 즐겨찾기에 추가됨' : '☆ 즐겨찾기에서 제거됨');
+}
+
+// ── SHARE ────────────────────────────────────────────────────
+function shareCard(id) {
+  const url = `${location.href.split('#')[0]}#${id}`;
+  if (navigator.share) {
+    const d = DATA.find(x=>x.id===id);
+    navigator.share({ title: d?.name || '이상지수연구소', url });
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('🔗 링크가 복사됐습니다'));
+  }
+}
+
+// ── TOAST ────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── LIVE STRIP BUILDER ───────────────────────────────────────
+function buildLiveStrip(d) {
+  if (!d.liveKey) return '';
+  const isStock = d.stockSym != null;
+  return `
+    <div class="live-strip ${isStock?'stock':''}" id="live-${d.liveKey}">
+      <div class="ls-label">
+        <div class="live-dot"></div>
+        ${isStock ? 'Yahoo Finance · allorigins proxy' : 'CoinGecko / alternative.me'}
+      </div>
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <span class="ls-val ls-loading">로딩 중…</span>
+        <span class="ls-change"> </span>
+      </div>
+    </div>`;
+}
+
+// ── CARD BUILDER ─────────────────────────────────────────────
+function buildCard(d) {
+  const factsHtml = (d.facts||[]).map(f=>`
+    <div class="fact">
+      <div class="fact-label">${f.label}</div>
+      <div class="fact-value">${f.value}</div>
+    </div>`).join('');
+
+  const liveOrLink = d.liveKey
+    ? `<span class="badge badge-live">🟢 LIVE API</span>`
+    : `<span class="badge badge-link">🔵 딥링크</span>`;
+
+  const extraLinks = (d.links||[]).map(l=>`
+    <a class="btn-link" href="${l.url}" target="_blank" rel="noreferrer">
+      ${l.label} <span class="link-arrow">↗</span>
+    </a>`).join('');
+
+  const bmIcon = isFav(d.id) ? '⭐' : '☆';
+
+  return `
+    <div class="card ${isFav(d.id)?'bookmarked':''}" data-cat="${d.cat}" data-id="${d.id}" id="card-${d.id}">
+      <button class="card-bm-btn ${isFav(d.id)?'on':''}" data-bmid="${d.id}"
+        onclick="toggleFav('${d.id}')" title="즐겨찾기">${bmIcon}</button>
+      ${buildLiveStrip(d)}
+      <div class="card-top">
+        <div class="card-meta-row">
+          <span class="card-emoji">${d.emoji}</span>
+          <div class="card-badges">
+            <span class="badge ${d.badge}">${d.badgeText}</span>
+            ${liveOrLink}
+          </div>
+        </div>
+        <div class="card-name">${d.name}</div>
+        <div class="card-name-en">${d.nameEn}</div>
+        <div class="card-tagline">${d.tagline}</div>
+      </div>
+      <div class="card-body">
+        <div class="story-label">유래 &amp; 해설</div>
+        <div class="story">${d.story}</div>
+        ${factsHtml ? `<div class="key-facts">${factsHtml}</div>` : ''}
+      </div>
+      <div class="card-footer">
+        <a class="btn-view-live" href="${d.viewUrl}" target="_blank" rel="noreferrer">
+          <span class="bvl-icon">📊</span> ${d.viewLabel}
+        </a>
+        ${extraLinks}
+        <button class="btn-share" onclick="shareCard('${d.id}')">🔗 공유</button>
+      </div>
+    </div>`;
+}
+
+// ── FEATURED CARD ────────────────────────────────────────────
+function buildFeatured() {
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0))/(1000*60*60*24));
+  const d = DATA[dayOfYear % DATA.length];
+  const dateStr = today.toLocaleDateString('ko-KR',{month:'long',day:'numeric'});
+  document.getElementById('featuredSection').innerHTML = `
+    <div class="featured-section" onclick="document.getElementById('card-${d.id}')?.scrollIntoView({behavior:'smooth',block:'center'})">
+      <div class="featured-emoji">${d.emoji}</div>
+      <div class="featured-body">
+        <div class="featured-meta">
+          <span class="featured-tag">오늘의 추천 지수</span>
+          <span class="featured-date">${dateStr}</span>
+        </div>
+        <div class="featured-name">${d.name}</div>
+        <div class="featured-tagline">${d.tagline}</div>
+        <div class="featured-hint">
+          <span class="featured-arrow">↓</span>
+          아래 카드로 이동해서 자세히 읽어보기
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── MAIN RENDER ──────────────────────────────────────────────
+function render() {
+  const container = document.getElementById('cardContainer');
+  const q = currentQ.toLowerCase();
+  const isFavMode = currentCat === 'favorites';
+
+  let filtered = DATA.filter(d => {
+    if (isFavMode) return isFav(d.id);
+    if (currentCat !== 'all' && d.cat !== currentCat) return false;
+    if (!q) return true;
+    return `${d.name} ${d.nameEn} ${d.cat} ${d.tagline} ${d.story}`.toLowerCase().includes(q);
+  });
+
+  if (!filtered.length) {
+    container.innerHTML = isFavMode
+      ? `<div class="empty-bookmarks"><div class="empty-bookmarks-icon">☆</div>아직 즐겨찾기가 없어요.<br>카드의 ☆ 버튼을 눌러 추가해보세요.</div>`
+      : `<div class="no-results"><div class="no-results-icon">🔍</div>검색 결과 없음 — 다른 키워드를 시도해보세요</div>`;
+    updateCounts(0);
+    return;
+  }
+
+  let html = '';
+  let adInserted = false;
+
+  if (isFavMode) {
+    html += `<div class="section">
+      <div class="section-head">
+        <span class="section-icon">⭐</span>
+        <span class="section-title">즐겨찾기</span>
+        <span class="section-count">${filtered.length}개</span>
+      </div>
+      <div class="cards-grid">${filtered.map(buildCard).join('')}</div>
+    </div>`;
+  } else {
+    CAT_ORDER.forEach(cat => {
+      const items = filtered.filter(d => d.cat === cat);
+      if (!items.length) return;
+      html += `
+        <div class="section">
+          <div class="section-head">
+            <span class="section-icon">${CATS[cat].icon}</span>
+            <span class="section-title">${cat}</span>
+            <span class="section-count">${items.length}개</span>
+          </div>
+          <div class="cards-grid">${items.map(buildCard).join('')}</div>
+        </div>`;
+
+      // Insert mid-page ad after designated category
+      if (cat === CAT_AD_AFTER && !adInserted) {
+        adInserted = true;
+        html += `
+          <div class="section-ad">
+            <div class="ad-banner">
+              <span class="ad-label-tag">광고</span>
+              <span class="ad-placeholder">970 × 90 — Mid-page 광고 배너 슬롯</span>
+            </div>
+          </div>`;
+      }
+    });
+  }
+
+  container.innerHTML = html;
+  updateCounts(filtered.length);
+
+  // Re-trigger live data
+  fetchFearGreed();
+  fetchCrypto();
+  fetchStockIndices();
+
+  // Scroll to anchor if present
+  const hash = location.hash.replace('#','');
+  if (hash) {
+    setTimeout(() => {
+      document.getElementById(`card-${hash}`)?.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 300);
+  }
+}
+
+function updateCounts(shown) {
+  document.getElementById('totalCount').textContent = DATA.length;
+  document.getElementById('shownCount').textContent = shown;
+  document.getElementById('filterCount').textContent = `${shown} / ${DATA.length}개`;
+}
+
+// ── POLL ─────────────────────────────────────────────────────
+(function initPoll(){
+  const TODAY = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Seoul'
+}).format(new Date());
+  document.getElementById('pollDate').textContent = TODAY;
+
+  // Base votes (simulated community)
+  const base = { up: 312, flat: 87, dn: 156 };
+
+  function getStoredVote() {
+    const s = localStorage.getItem(`iw_poll_${TODAY}`);
+    return s ? JSON.parse(s) : null;
+  }
+
+  function savePollVote(choice) {
+    localStorage.setItem(`iw_poll_${TODAY}`, JSON.stringify({choice}));
+  }
+
+  function renderPoll(myChoice) {
+    const votes = {...base};
+    if (myChoice) votes[myChoice] = (votes[myChoice]||0) + 1;
+    const total = votes.up + votes.flat + votes.dn;
+    const pUp   = Math.round(votes.up   / total * 100);
+    const pFlat = Math.round(votes.flat / total * 100);
+    const pDn   = 100 - pUp - pFlat;
+
+    document.getElementById('barUp').style.width   = pUp   + '%';
+    document.getElementById('barFlat').style.width = pFlat + '%';
+    document.getElementById('barDn').style.width   = pDn   + '%';
+    document.getElementById('pctUp').textContent   = pUp   + '%';
+    document.getElementById('pctFlat').textContent = pFlat + '%';
+    document.getElementById('pctDn').textContent   = pDn   + '%';
+    document.getElementById('pollTotalNote').textContent = `총 ${total.toLocaleString()}명 투표 (오늘 기준)`;
+
+    if (myChoice) {
+      ['up','dn','flat'].forEach(k => {
+        const btn = document.getElementById(`poll${k.charAt(0).toUpperCase()+k.slice(1)}`);
+        btn.classList.toggle(`voted-${k}`, k === myChoice);
+        btn.disabled = true;
+      });
+    }
+  }
+
+  window.castVote = function(choice) {
+    savePollVote(choice);
+    renderPoll(choice);
+    showToast('투표 완료! 오늘 하루 한 번만 집계됩니다 👍');
+  };
+
+  const stored = getStoredVote();
+  renderPoll(stored?.choice || null);
+})();
+
+// ── REFRESH COUNTDOWN ────────────────────────────────────────
+let countdown = 60;
+function tickCountdown() {
+  countdown--;
+  const el = document.getElementById('refreshCountdown');
+  if (el) el.textContent = `${countdown}s`;
+  if (countdown <= 0) {
+    countdown = 60;
+    const ring = document.getElementById('refreshRing');
+    ring.classList.add('spinning');
+    fetchFearGreed();
+    fetchCrypto();
+    fetchStockIndices();
+    setTimeout(() => ring.classList.remove('spinning'), 1500);
+  }
+}
+setInterval(tickCountdown, 1000);
+
+document.getElementById('refreshWrap').addEventListener('click', () => {
+  countdown = 60;
+  const ring = document.getElementById('refreshRing');
+  ring.classList.add('spinning');
+  fetchFearGreed();
+  fetchCrypto();
+  fetchStockIndices();
+  setTimeout(() => ring.classList.remove('spinning'), 1500);
+  showToast('🔄 데이터를 새로 불러오는 중…');
+});
+
+// ── EVENTS ───────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', function(){
+  currentQ = this.value.trim();
+  render();
+});
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    currentCat = this.dataset.cat;
+    render();
+  });
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+// Ticker
+const tt = document.getElementById('tickerTrack');
+if (tt) tt.innerHTML = buildTickerHTML();
+
+// Featured card
+buildFeatured();
+
+// Main render
+render();
+
+// Initial fetches
+fetchFearGreed();
+fetchCrypto();
+fetchStockIndices();
+
+})();
+</script>
+</body>
+</html>
